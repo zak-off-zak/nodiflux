@@ -36,6 +36,19 @@
 *.exe
 *.out
 *.app
+test_main
 
 # debug information files
 *.dwo
+
+# Build directories
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+/cmakescripts/
+/Makefile
+/*.cmake
+
+
+# OS generated files
+.DS_Store
