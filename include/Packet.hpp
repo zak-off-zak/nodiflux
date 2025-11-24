@@ -13,6 +13,7 @@ enum class PacketType : uint8_t {
 struct Packet {
   uint16_t src;
   uint16_t dest;
+  PacketType type;
   uint8_t hop_lmt;
   uint8_t hop_cnt;
   uint16_t msg_id;
