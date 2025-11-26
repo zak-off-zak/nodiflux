@@ -2,6 +2,7 @@
 #define PACKET
 
 #include <cstdint>
+#include <cstring>
 
 enum class PacketType : uint8_t {
   DIS = 0x01,
@@ -10,15 +11,20 @@ enum class PacketType : uint8_t {
   KAL = 0x04,
 };
 
+#pragma pack(push, 1)
 struct Packet {
   uint16_t src;
   uint16_t dest;
   PacketType type;
-  uint8_t hop_lmt;
-  uint8_t hop_cnt;
+  uint8_t htl; // Hopts To Live
   uint16_t msg_id;
   uint8_t msg[20];
   uint8_t chs;
 };
+#pragma pack(pop)
+
+uint8_t checksum(const Packet& pkt);
+size_t serialize(const Packet& pkt, uint8_t* buffer);
+size_t deserialize(const uint8_t* buffer, Packet& pkt);
 
 #endif // !PACKET

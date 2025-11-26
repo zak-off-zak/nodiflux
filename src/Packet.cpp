@@ -1,6 +1,4 @@
 #include "Packet.hpp"
-#include <cstdint>
-#include <cstring>
 
 uint8_t checksum(const Packet& pkt){
   uint8_t cs = 0;

@@ -46,9 +46,9 @@ test_main
 /CMakeFiles/
 /CMakeCache.txt
 /cmakescripts/
-/Makefile
 /*.cmake
 
 
 # OS generated files
 .DS_Store
+.cache
