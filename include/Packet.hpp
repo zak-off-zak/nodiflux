@@ -16,8 +16,8 @@ struct Packet {
   uint16_t src;
   uint16_t dest;
   PacketType type;
-  uint8_t htl; // Hopts To Live
-  uint16_t msg_id;
+  uint8_t ttl;
+  uint16_t pkt_id;
   uint8_t msg[20];
   uint8_t chs;
 };

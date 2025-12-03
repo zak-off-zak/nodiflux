@@ -8,8 +8,8 @@ TEST(PacketTest, Checksum){
   pkt.src = 1;
   pkt.dest = 2;
   pkt.type = PacketType::DAT;
-  pkt.htl = 11;
-  pkt.msg_id = 1;
+  pkt.ttl = 11;
+  pkt.pkt_id = 1;
   for(int i = 0; i < 20; i++){
     pkt.msg[i] = i;
   }
@@ -24,8 +24,8 @@ TEST(PacketTest, SerializeDeserialize){
   pkt.src = 1;
   pkt.dest = 2;
   pkt.type = PacketType::DAT;
-  pkt.htl = 11;
-  pkt.msg_id = 1;
+  pkt.ttl = 11;
+  pkt.pkt_id = 1;
   for(int i = 0; i < 20; i++){
     pkt.msg[i] = i;
   }
@@ -41,8 +41,8 @@ TEST(PacketTest, SerializeDeserialize){
   EXPECT_EQ(recieved.src, pkt.src);
   EXPECT_EQ(recieved.dest, pkt.dest);
   EXPECT_EQ(recieved.type, pkt.type);
-  EXPECT_EQ(recieved.htl, pkt.htl);
-  EXPECT_EQ(recieved.msg_id, pkt.msg_id);
+  EXPECT_EQ(recieved.ttl, pkt.ttl);
+  EXPECT_EQ(recieved.pkt_id, pkt.pkt_id);
   EXPECT_TRUE(std::equal(std::begin(recieved.msg), std::end(recieved.msg), std::begin(pkt.msg)));
   EXPECT_EQ(recieved.chs, pkt.chs);
 }

@@ -11,8 +11,8 @@ int main() {
   pkt.src = 1;
   pkt.dest = 2;
   pkt.type = PacketType::DAT;
-  pkt.htl = 11;
-  pkt.msg_id = 1;
+  pkt.ttl = 11;
+  pkt.pkt_id = 1;
   for(int i = 0; i < 20; i++){
     pkt.msg[i] = i;
   }
