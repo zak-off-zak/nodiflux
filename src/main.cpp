@@ -1,25 +1,13 @@
 #include "Packet.hpp"
+#include "Protocol.hpp"
 #include <Arduino.h>
 #include <WiFi.h>
-#include <cstdint>
 #include <esp_now.h>
 
+uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len){
-  DiscoveryPacket data;
-  memcpy(&data, incomingData, sizeof(DiscoveryPacket));
-  Serial.print("LEN: ");
-  Serial.println(len);
-  Serial.print("src: ");
-  Serial.println(data.src);
-  // Serial.print("type: ");
-  // Serial.println(data.type);
-  Serial.print("pkt_id: ");
-  Serial.println(data.pkt_id);
-  Serial.print("chs: ");
-  Serial.println(data.chs);
-  Serial.println();
-}
+esp_now_peer_info_t peerInfo;
+
 
 void setup() {
   Serial.begin(115200);
@@ -31,7 +19,18 @@ void setup() {
   }
 
   esp_now_register_recv_cb(OnDataReceive);
+  esp_now_register_send_cb(OnDataSent);
+
+  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
+  peerInfo.channel = 1;
+  peerInfo.encrypt = false;
+
+  if(esp_now_add_peer(&peerInfo) != ESP_OK){
+    Serial.println("Failed to add peer");
+    return;
+  }
 }
 
 void loop() {
+  SendDiscoveryPacket(broadcastAddress);
 }
