@@ -12,7 +12,7 @@ enum class PacketType : uint8_t {
 };
 
 #pragma pack(push, 1)
-struct Packet {
+struct DataPacket {
   uint16_t src;
   uint16_t dest;
   PacketType type;
@@ -25,8 +25,9 @@ struct Packet {
 
 struct DiscoveryPacket {
   uint16_t src;
-  uint16_t dest;
   PacketType type;
+  uint16_t pkt_id;
+  uint8_t chs;
 };
 
 struct AcknowledgePacket {
@@ -34,10 +35,11 @@ struct AcknowledgePacket {
   uint16_t dest;
   PacketType type;
   uint16_t pkt_id;
+  uint8_t chs;
 };
 
-uint8_t checksum(const Packet& pkt);
-size_t serialize(const Packet& pkt, uint8_t* buffer);
-size_t deserialize(const uint8_t* buffer, Packet& pkt);
+uint8_t checksum(const DataPacket& pkt);
+size_t serialize(const DataPacket& pkt, uint8_t* buffer);
+size_t deserialize(const uint8_t* buffer, DataPacket& pkt);
 
 #endif // !PACKET

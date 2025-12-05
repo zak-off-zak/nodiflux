@@ -4,7 +4,7 @@
 
 TEST(PacketTest, Checksum){
   // Creating a packet
-  Packet pkt{};
+  DataPacket pkt{};
   pkt.src = 1;
   pkt.dest = 2;
   pkt.type = PacketType::DAT;
@@ -20,7 +20,7 @@ TEST(PacketTest, Checksum){
 
 TEST(PacketTest, SerializeDeserialize){
   // Creating a packet
-  Packet pkt{};
+  DataPacket pkt{};
   pkt.src = 1;
   pkt.dest = 2;
   pkt.type = PacketType::DAT;
@@ -31,10 +31,10 @@ TEST(PacketTest, SerializeDeserialize){
   }
   pkt.chs =   checksum(pkt);
 
-  uint8_t buffer[sizeof(Packet)] = {0};
+  uint8_t buffer[sizeof(DataPacket)] = {0};
   serialize(pkt, buffer);
 
-  Packet recieved{};
+  DataPacket recieved{};
   bool valid = deserialize(buffer, recieved);
 
   EXPECT_TRUE(valid);

@@ -7,7 +7,7 @@ int main() {
   //Testing Packet
   
   // Creating a packet
-  Packet pkt{};
+  DataPacket pkt{};
   pkt.src = 1;
   pkt.dest = 2;
   pkt.type = PacketType::DAT;
@@ -21,16 +21,16 @@ int main() {
   std::cout << "Checksum: " << std::hex << int(pkt.chs) << std::endl;
   
   // Serializing
-  uint8_t buffer[sizeof(Packet)] = {0};
+  uint8_t buffer[sizeof(DataPacket)] = {0};
   serialize(pkt, buffer);
   std::cout << "Buffer: " << std::endl;
-  for(int i = 0; i < sizeof(Packet); i++){
+  for(int i = 0; i < sizeof(DataPacket); i++){
     std::cout << std::hex << int(buffer[i]) << " ";
   }
   std::cout << std::dec << std::endl;
 
   // Deserialize
-  Packet recieved{};
+  DataPacket recieved{};
   bool valid = deserialize(buffer, recieved);
   std::cout << "Packet validity: " << valid << std::endl;
   std::cout << "src = " << recieved.src << std::endl << "dest = " << recieved.dest << std::endl;

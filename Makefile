@@ -35,5 +35,4 @@ pm:
 	@echo "[PLATFROM_IO]: Monitor"
 	pio device monitor
 
-
-.PHONY: all configure build run test clean
+.PHONY: all configure build run test
