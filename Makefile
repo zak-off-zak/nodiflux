@@ -23,4 +23,12 @@ clean:
 	@echo "[BUILD]: Cleaning build directory"
 	rm -rf $(BUILD_DIR)
 
+prun:
+	@echo "[PLATFROM_IO]: Creating an image"
+	pio run
+
+pup:
+	@echo "[PLATFROM_IO]: Uploading to the target"
+	pio run -t upload
+
 .PHONY: all configure build run test clean
