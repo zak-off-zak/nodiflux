@@ -24,7 +24,7 @@ struct DataPacket {
 #pragma pack(pop)
 
 struct DiscoveryPacket {
-  uint16_t src;
+  char src[18];
   PacketType type;
   uint16_t pkt_id;
   uint8_t chs;
@@ -39,6 +39,7 @@ struct AcknowledgePacket {
 };
 
 uint8_t checksum(const DataPacket& pkt);
+uint8_t checksum(const DiscoveryPacket& pkt);
 size_t serialize(const DataPacket& pkt, uint8_t* buffer);
 size_t deserialize(const uint8_t* buffer, DataPacket& pkt);
 
