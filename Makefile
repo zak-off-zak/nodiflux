@@ -31,4 +31,9 @@ pup:
 	@echo "[PLATFROM_IO]: Uploading to the target"
 	pio run -t upload
 
+pm:
+	@echo "[PLATFROM_IO]: Monitor"
+	pio device monitor
+
+
 .PHONY: all configure build run test clean
