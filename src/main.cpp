@@ -1,8 +1,7 @@
-#include "Packet.hpp"
-#include "Protocol.hpp"
 #include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
+#include "Protocol.hpp"
 
 uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 

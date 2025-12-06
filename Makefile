@@ -4,8 +4,9 @@ EXECUTABLE := $(BUILD_DIR)/test_main
 all: build run
 
 configure:
-	@echo "[BUILD]: Configuring CMake"
-	cmake -B $(BUILD_DIR) -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+	@echo "[BUILD]: Configuring PlatformIO + clangd"
+	pio init --ide vim
+	pio run -t compiledb
 
 build: configure
 	@echo "[BUILD]: Building via CMake"

@@ -54,3 +54,4 @@ test_main
 .cache
 
 .pio
+compile_commands.json
