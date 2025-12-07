@@ -9,7 +9,7 @@ void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len
     return;
   }
 
-  Packet* pkt = Packet::deserialize(incomingData, len);
+  Packet* pkt = Packet::deserializeFactory(incomingData, len);
 
   if(pkt == nullptr){
     Serial.println("Unknown packet type!\n");

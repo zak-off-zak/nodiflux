@@ -23,14 +23,17 @@ class Packet {
     uint8_t chs;
   public:
     PacketType getType() const { return this->type; }
+    const uint8_t* getSrc() const {return this->src; }
+    uint8_t getPktId() const {return this->pkt_id; }
     uint8_t getChecksum() const { return this->chs; }
 
     virtual ~Packet() = default;
     virtual size_t serialize(uint8_t* buffer, size_t buffer_size) const = 0;
+    virtual bool deserializeFields(const uint8_t* buffer, size_t len) = 0;
     virtual uint8_t checksum() const = 0;
     virtual void handle() const = 0;
 
-    static Packet* deserialize(const uint8_t* buffer, size_t len);
+    static Packet* deserializeFactory(const uint8_t* buffer, size_t len);
 };
 
 class DataPacket : public Packet {
@@ -40,6 +43,7 @@ class DataPacket : public Packet {
     uint8_t msg[DATA_PACKET_SIZE];
 
     size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
+    bool deserializeFields(const uint8_t* buffer, size_t len) override;
     uint8_t checksum() const override;
     void handle() const override;
 };
@@ -48,6 +52,7 @@ class DiscoveryPacket : public Packet {
   public:
     DiscoveryPacket();
     size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
+    bool deserializeFields(const uint8_t* buffer, size_t len) override;
     uint8_t checksum() const override;
     void handle() const override;
 };
@@ -58,6 +63,7 @@ class AcknowledgePacket : public Packet {
     uint8_t ttl;
 
     size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
+    bool deserializeFields(const uint8_t* buffer, size_t len) override;
     uint8_t checksum() const override;
     void handle() const override;
 };

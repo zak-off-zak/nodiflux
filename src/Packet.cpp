@@ -9,17 +9,27 @@
 #include <cstdlib>
 #include <WiFi.h>
 
-Packet* Packet::deserialize(const uint8_t* buffer, size_t len){
+Packet* Packet::deserializeFactory(const uint8_t* buffer, size_t len){
+  if(len < 1) return nullptr;
   PacketType type = static_cast<PacketType>(buffer[0]);
+  Packet* pkt = nullptr;
   switch (type) {
-    case PacketType::DIS:
-      return new DiscoveryPacket();
-    case PacketType::ACK:
-      return nullptr;
-    case PacketType::DAT:
-      return nullptr;
+    case PacketType::DIS: pkt = new DiscoveryPacket(); break;
+    case PacketType::ACK: pkt = new AcknowledgePacket(); break;
+    case PacketType::DAT: pkt = new DataPacket(); break;
   }
-  return nullptr;
+
+  if(!pkt->deserializeFields(buffer, len)){
+    delete pkt;
+    return nullptr;
+  }
+
+  if (pkt->getChecksum() != pkt->checksum()){
+    delete pkt;
+    return nullptr;
+  }
+
+  return pkt;
 }
 
 
@@ -72,6 +82,40 @@ uint8_t DataPacket::checksum() const{
     cs ^= bytes[i];
   }
   return cs;
+}
+
+bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
+  if(len < 37) return false;
+
+  size_t offset = 0;
+
+  if(offset + 1 > len) return false;
+  this->type = static_cast<PacketType>(buffer[offset]);
+  offset++;
+
+  if(offset + 6 > len) return false;
+  memcpy(this->src, buffer + offset, 6);
+  offset += 6;
+
+  if(offset + 2 > len) return false;
+  this->pkt_id = readLE16(buffer, offset);
+  offset += 2;
+
+  if(offset + 6 > len) return false;
+  memcpy(this->dest, buffer + offset, 6);
+  offset += 6;
+
+  if(offset + 1 > len) return false;
+  this->ttl = buffer[offset++];
+
+  if(offset + DATA_PACKET_SIZE > len) return false;
+  memcpy(this->msg, buffer + offset, DATA_PACKET_SIZE);
+  offset += DATA_PACKET_SIZE;
+
+  if(offset + 1 > len) return false;
+  this->chs = buffer[offset++];
+
+  return true;
 }
 
 void DataPacket::handle() const{
@@ -142,6 +186,29 @@ void DiscoveryPacket::handle() const{
   Serial.println(chs);
 }
 
+bool DiscoveryPacket::deserializeFields(const uint8_t* buffer, size_t len){
+  if(len < 10) return false;
+
+  size_t offset = 0;
+
+  if(offset + 1 > len) return false;
+  this->type = static_cast<PacketType>(buffer[offset]);
+  offset++;
+
+  if(offset + 6 > len) return false;
+  memcpy(this->src, buffer + offset, 6);
+  offset += 6;
+
+  if(offset + 2 > len) return false;
+  this->pkt_id = readLE16(buffer, offset);
+  offset += 2;
+
+  if(offset + 1 > len) return false;
+  this->chs = buffer[offset++];
+
+  return true;
+}
+
 // Little-Endian
 size_t AcknowledgePacket::serialize(uint8_t* buffer, size_t buffer_size) const {
   // PacketType type;
@@ -186,6 +253,36 @@ uint8_t AcknowledgePacket::checksum() const{
     cs ^= bytes[i];
   }
   return cs;
+}
+
+bool AcknowledgePacket::deserializeFields(const uint8_t* buffer, size_t len){
+  if(len < 37) return false;
+
+  size_t offset = 0;
+
+  if(offset + 1 > len) return false;
+  this->type = static_cast<PacketType>(buffer[offset]);
+  offset++;
+
+  if(offset + 6 > len) return false;
+  memcpy(this->src, buffer + offset, 6);
+  offset += 6;
+
+  if(offset + 2 > len) return false;
+  this->pkt_id = readLE16(buffer, offset);
+  offset += 2;
+
+  if(offset + 6 > len) return false;
+  memcpy(this->dest, buffer + offset, 6);
+  offset += 6;
+
+  if(offset + 1 > len) return false;
+  this->ttl = buffer[offset++];
+
+  if(offset + 1 > len) return false;
+  this->chs = buffer[offset++];
+
+  return true;
 }
 
 void AcknowledgePacket::handle() const{
