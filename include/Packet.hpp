@@ -23,8 +23,6 @@ class Packet {
     uint8_t chs;
   public:
     PacketType getType() const { return this->type; }
-    const uint8_t* getSrc() const {return this->src; }
-    uint8_t getPktId() const {return this->pkt_id; }
     uint8_t getChecksum() const { return this->chs; }
 
     virtual ~Packet() = default;
