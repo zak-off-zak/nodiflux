@@ -1,5 +1,7 @@
 BUILD_DIR := build
 EXECUTABLE := $(BUILD_DIR)/test_main
+NATIVE_ENV := native
+ESP_ENV := nodemcu-32s
 
 all: build run
 
@@ -16,21 +18,21 @@ run: build
 	@echo "[RUN]: Starting executable"
 	@$(EXECUTABLE)
 
-test: build
-	@echo "[TEST]: Running Google Tests"
-	@cd $(BUILD_DIR) && ctest -V
-
 clean:
 	@echo "[BUILD]: Cleaning build directory"
 	rm -rf $(BUILD_DIR)
 
 prun:
 	@echo "[PLATFROM_IO]: Creating an image"
-	pio run
+	pio run -e $(ESP_ENV)
+
+ptest: 
+	@echo "[TEST]: Running Google Tests"
+	pio test -e $(NATIVE_ENV)
 
 pup:
 	@echo "[PLATFROM_IO]: Uploading to the target"
-	pio run -t upload
+	pio run -e $(ESP_ENV) -t upload
 
 pm:
 	@echo "[PLATFROM_IO]: Monitor"
