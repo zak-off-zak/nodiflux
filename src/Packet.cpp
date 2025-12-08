@@ -1,5 +1,4 @@
 #include "Packet.hpp"
-#include "WString.h"
 #include "config.hpp"
 #include "utils.hpp"
 

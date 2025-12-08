@@ -35,10 +35,11 @@ class Packet {
 };
 
 class DataPacket : public Packet {
-  public:
+  protected:
     uint8_t dest[6];
     uint8_t ttl;
     uint8_t msg[DATA_PACKET_SIZE];
+  public:
 
     size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
     bool deserializeFields(const uint8_t* buffer, size_t len) override;
@@ -56,10 +57,10 @@ class DiscoveryPacket : public Packet {
 };
 
 class AcknowledgePacket : public Packet {
-  public:
+  protected:
     uint8_t dest[6];
     uint8_t ttl;
-
+  public:
     size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
     bool deserializeFields(const uint8_t* buffer, size_t len) override;
     uint8_t checksum() const override;
