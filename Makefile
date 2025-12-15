@@ -36,6 +36,6 @@ pup:
 
 pm:
 	@echo "[PLATFROM_IO]: Monitor"
-	pio device monitor
+	pio device monitor -b 115200
 
 .PHONY: all configure build run test

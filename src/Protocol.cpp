@@ -39,6 +39,6 @@ void SendDiscoveryPacket(const uint8_t* broadcastAddress){
   esp_err_t result = esp_now_send(broadcastAddress, buffer, len);
 
   if (result != ESP_OK) Serial.println("Sending error");
-  delay(1000);
+  delay(DIS_BROADCAST_SPEED); // TODO: Refactor once other parts ready, otherwise block all other processes
 }
 
