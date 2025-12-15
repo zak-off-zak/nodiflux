@@ -35,6 +35,29 @@ Packet* Packet::deserializeFactory(const uint8_t* buffer, size_t len){
   return pkt;
 }
 
+DataPacket::DataPacket(){
+}
+
+
+DataPacket::DataPacket(const std::string& message, const uint8_t dest[6]){
+    this->type = PacketType::DAT;
+
+    uint8_t mac_bytes[6];
+    macStringToBytes(WiFi.macAddress(), mac_bytes);
+    memcpy(this->src, mac_bytes, 6);
+    memcpy(this->dest, dest, 6);
+
+    size_t len = std::min(message.size(), (size_t)DATA_MESSAGE_SIZE);
+    memcpy(this->msg, message.data(), len);
+    if (len < DATA_MESSAGE_SIZE) {
+        memset(this->msg + len, 0, DATA_MESSAGE_SIZE - len);
+    }
+
+    this->ttl = DATA_TTL;
+    this->pkt_id = generatePktId(mac_bytes);
+    this->chs = this->checksum();
+}
+
 
 // Little-Endian
 size_t DataPacket::serialize(uint8_t* buffer, size_t buffer_size) const {
@@ -150,7 +173,6 @@ DiscoveryPacket::DiscoveryPacket(){
   memcpy(this->src, mac_bytes, 6);
   this->pkt_id = generatePktId(mac_bytes);
   this->chs = this->checksum();
-
 }
 
 // Little-Endian

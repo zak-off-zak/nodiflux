@@ -5,6 +5,8 @@
 #include "Protocol.hpp"
 
 uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+const uint8_t mac_addr[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
 
 esp_now_peer_info_t peerInfo;
 
@@ -33,6 +35,7 @@ void setup() {
 
 void loop() {
   SendDiscoveryPacket(broadcastAddress);
+  SendDataPacket(mac_addr);
   // NodeRegistry::instance().debug();
   // NodeRegistry::instance().debugMostRecentNode();
 }

@@ -45,3 +45,17 @@ void sendPacket(const uint8_t* mac_addr, const Packet& packet){
 
   if (result != ESP_OK) Serial.println("Sending error");
 }
+
+void SendDataPacket(const uint8_t* dest) {
+    while (!Serial.available()) {
+        delay(1);
+    }
+
+    String input = Serial.readStringUntil('\n');
+    std::string message = input.c_str();
+
+    DataPacket data_pkt(message, dest);
+
+    sendPacket(dest, data_pkt);
+}
+
