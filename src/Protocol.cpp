@@ -1,6 +1,7 @@
 #include "Protocol.hpp"
 #include "HardwareSerial.h"
 #include "Packet.hpp"
+#include "config.hpp"
 #include "utils.hpp"
 
 void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len){
@@ -38,6 +39,6 @@ void SendDiscoveryPacket(const uint8_t* broadcastAddress){
   esp_err_t result = esp_now_send(broadcastAddress, buffer, len);
 
   if (result != ESP_OK) Serial.println("Sending error");
-  delay(2000);
+  delay(DIS_BROADCAST_SPEED);
 }
 
