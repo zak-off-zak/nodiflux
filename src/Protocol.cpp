@@ -34,11 +34,13 @@ void OnDataSent(const uint8_t* mac_addr, esp_now_send_status_t status){
 
 void SendDiscoveryPacket(const uint8_t* broadcastAddress){
   DiscoveryPacket dsk_pkt;
-  uint8_t buffer[32];
-  size_t len = dsk_pkt.serialize(buffer, sizeof(buffer));
-  esp_err_t result = esp_now_send(broadcastAddress, buffer, len);
-
-  if (result != ESP_OK) Serial.println("Sending error");
-  delay(DIS_BROADCAST_SPEED); // TODO: Refactor once other parts ready, otherwise block all other processes
+  sendPacket(broadcastAddress, dsk_pkt);
 }
 
+void sendPacket(const uint8_t* mac_addr, const Packet& packet){
+  uint8_t buffer[DATA_MESSAGE_SIZE + 17];
+  size_t len = packet.serialize(buffer, sizeof(buffer));
+  esp_err_t result = esp_now_send(mac_addr, buffer, len);
+
+  if (result != ESP_OK) Serial.println("Sending error");
+}

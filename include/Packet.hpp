@@ -38,7 +38,7 @@ class DataPacket : public Packet {
   protected:
     uint8_t dest[6];
     uint8_t ttl;
-    uint8_t msg[DATA_PACKET_SIZE];
+    uint8_t msg[DATA_MESSAGE_SIZE];
   public:
 
     size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
