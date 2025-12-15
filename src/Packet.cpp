@@ -1,5 +1,7 @@
 #include "Packet.hpp"
+#include "HardwareSerial.h"
 #include "NodeRegistry.hpp"
+#include "Protocol.hpp"
 #include "config.hpp"
 #include "utils.hpp"
 
@@ -119,9 +121,26 @@ bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
   return true;
 }
 
-void DataPacket::handle() const{
-  //TODO: hadling logic here
-  // Serial.printf("DataPacket handling here\n");
+void DataPacket::handle() {
+  Serial.printf("DataPacket handling here\n");
+  this->ttl = this->ttl - 1;
+  if(this->ttl > 0){
+    uint8_t mac_bytes[6];
+    macStringToBytes(WiFi.macAddress(), mac_bytes);
+    bool equal = true;
+    for (size_t i = 0; i < 6; ++i) {
+        if (this->dest[i] != mac_bytes[i]) {
+            equal = false;
+            break;
+        }
+    }
+    if(equal){
+      Serial.print("Message: ");
+      Serial.println((char*)this->msg);
+    } else {
+      sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
+    }
+  }
 }
 
 DiscoveryPacket::DiscoveryPacket(){
@@ -171,21 +190,21 @@ uint8_t DiscoveryPacket::checksum() const{
   return cs;
 }
 
-void DiscoveryPacket::handle() const{
-  Serial.println("Handling DiscoveryPacket:");
-
-  Serial.print("src: ");
-  for (int i = 0; i < 6; i++) {
-    Serial.printf("%02X", src[i]);
-    if (i < 5) Serial.print(":");
-  }
-  Serial.println();
-
-  Serial.print("pkt_id: ");
-  Serial.println(pkt_id);
-
-  Serial.print("chs: ");
-  Serial.println(chs);
+void DiscoveryPacket::handle() {
+  // Serial.println("Handling DiscoveryPacket:");
+  //
+  // Serial.print("src: ");
+  // for (int i = 0; i < 6; i++) {
+  //   Serial.printf("%02X", src[i]);
+  //   if (i < 5) Serial.print(":");
+  // }
+  // Serial.println();
+  //
+  // Serial.print("pkt_id: ");
+  // Serial.println(pkt_id);
+  //
+  // Serial.print("chs: ");
+  // Serial.println(chs);
 
   NodeRegistry::instance().updateNode(this->src, std::time(nullptr));
 }
@@ -289,7 +308,7 @@ bool AcknowledgePacket::deserializeFields(const uint8_t* buffer, size_t len){
   return true;
 }
 
-void AcknowledgePacket::handle() const{
+void AcknowledgePacket::handle() {
   //TODO: hadling logic here
   // Serial.printf("AcknowledgePacket handling here\n");
 }
