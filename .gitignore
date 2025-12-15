@@ -52,3 +52,7 @@ test_main
 # OS generated files
 .DS_Store
 .cache
+
+.pio
+compile_commands.json
+.ccls
