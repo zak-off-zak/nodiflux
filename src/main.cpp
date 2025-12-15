@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
+#include "NodeRegistry.hpp"
 #include "Protocol.hpp"
 
 uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
@@ -32,4 +33,5 @@ void setup() {
 
 void loop() {
   SendDiscoveryPacket(broadcastAddress);
+  NodeRegistry::instance().debug();
 }

@@ -1,4 +1,5 @@
 #include "Packet.hpp"
+#include "NodeRegistry.hpp"
 #include "config.hpp"
 #include "utils.hpp"
 
@@ -129,6 +130,7 @@ DiscoveryPacket::DiscoveryPacket(){
   memcpy(this->src, mac_bytes, 6);
   this->pkt_id = generatePktId(mac_bytes);
   this->chs = this->checksum();
+
 }
 
 // Little-Endian
@@ -183,6 +185,8 @@ void DiscoveryPacket::handle() const{
 
   Serial.print("chs: ");
   Serial.println(chs);
+
+  NodeRegistry::instance().updateNode(this->src, std::time(nullptr));
 }
 
 bool DiscoveryPacket::deserializeFields(const uint8_t* buffer, size_t len){
