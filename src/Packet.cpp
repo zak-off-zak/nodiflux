@@ -19,6 +19,7 @@ Packet* Packet::deserializeFactory(const uint8_t* buffer, size_t len){
     case PacketType::DAT: pkt = new DataPacket(); break;
   }
 
+  // TODO: Avoid double checking
   if(!pkt->deserializeFields(buffer, len)){
     delete pkt;
     return nullptr;
@@ -76,7 +77,7 @@ uint8_t DataPacket::checksum() const{
   // Could be done diretly on field to save memory
   // Size of the packet is 37
   uint8_t cs = 0;
-  uint8_t bytes[37];
+  uint8_t bytes[DATA_PACKET_SIZE + 17];
   size_t len = this->serialize(bytes, sizeof(bytes));
   for(size_t i = 0; i < len - 1; i++){
     cs ^= bytes[i];
@@ -85,7 +86,7 @@ uint8_t DataPacket::checksum() const{
 }
 
 bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
-  if(len < 37) return false;
+  if(len < DATA_PACKET_SIZE + 17) return false;
 
   size_t offset = 0;
 
