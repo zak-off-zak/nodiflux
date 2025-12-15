@@ -63,9 +63,9 @@ size_t DataPacket::serialize(uint8_t* buffer, size_t buffer_size) const {
   if(offset + 1 > buffer_size) return offset;
   buffer[offset++] = this->ttl;
 
-  if(offset + DATA_PACKET_SIZE > buffer_size) return offset;
-  memcpy(buffer + offset, this->msg, DATA_PACKET_SIZE);
-  offset += DATA_PACKET_SIZE;
+  if(offset + DATA_MESSAGE_SIZE > buffer_size) return offset;
+  memcpy(buffer + offset, this->msg, DATA_MESSAGE_SIZE);
+  offset += DATA_MESSAGE_SIZE;
 
   if(offset + 1 > buffer_size) return offset;
   buffer[offset++] = this->chs;
@@ -77,7 +77,7 @@ uint8_t DataPacket::checksum() const{
   // Could be done diretly on field to save memory
   // Size of the packet is 37
   uint8_t cs = 0;
-  uint8_t bytes[DATA_PACKET_SIZE + 17];
+  uint8_t bytes[DATA_MESSAGE_SIZE + 17];
   size_t len = this->serialize(bytes, sizeof(bytes));
   for(size_t i = 0; i < len - 1; i++){
     cs ^= bytes[i];
@@ -86,7 +86,7 @@ uint8_t DataPacket::checksum() const{
 }
 
 bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
-  if(len < DATA_PACKET_SIZE + 17) return false;
+  if(len < DATA_MESSAGE_SIZE + 17) return false;
 
   size_t offset = 0;
 
@@ -109,9 +109,9 @@ bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
   if(offset + 1 > len) return false;
   this->ttl = buffer[offset++];
 
-  if(offset + DATA_PACKET_SIZE > len) return false;
-  memcpy(this->msg, buffer + offset, DATA_PACKET_SIZE);
-  offset += DATA_PACKET_SIZE;
+  if(offset + DATA_MESSAGE_SIZE > len) return false;
+  memcpy(this->msg, buffer + offset, DATA_MESSAGE_SIZE);
+  offset += DATA_MESSAGE_SIZE;
 
   if(offset + 1 > len) return false;
   this->chs = buffer[offset++];
