@@ -48,14 +48,30 @@ void NodeRegistry::debug() const {
         Serial.print("  lastSeen: ");
         Serial.println(static_cast<long>(lastSeen));
     }
+}
 
 
-    auto mac = this->getMostRecentNode();
+void NodeRegistry::debugMostRecentNode(){
+    std::array<uint8_t, 6> mostRecent = this->getMostRecentNode();
+
+    bool empty = true;
+    for (auto b : mostRecent) {
+        if (b != 0) {
+            empty = false;
+            break;
+        }
+    }
+
+    if (empty) {
+        Serial.println("NodeRegistry is empty!");
+        return;
+    }
+
     Serial.print("Most recent node: ");
-    for (size_t i = 0; i < mac.size(); ++i) {
-      if (mac[i] < 0x10) Serial.print('0');
-      Serial.print(static_cast<unsigned int>(mac[i]), HEX);
-      if (i < mac.size()-1) Serial.print(':');
+    for (size_t i = 0; i < mostRecent.size(); ++i) {
+        if (mostRecent[i] < 0x10) Serial.print('0');
+        Serial.print(static_cast<unsigned int>(mostRecent[i]), HEX);
+        if (i < mostRecent.size() - 1) Serial.print(':');
     }
     Serial.println();
 }

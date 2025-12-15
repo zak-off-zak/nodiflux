@@ -34,4 +34,5 @@ void setup() {
 void loop() {
   SendDiscoveryPacket(broadcastAddress);
   NodeRegistry::instance().debug();
+  NodeRegistry::instance().debugMostRecentNode();
 }
