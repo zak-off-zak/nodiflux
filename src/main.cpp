@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
-#include "NodeRegistry.hpp"
 #include "Protocol.hpp"
+#include "config.hpp"
 
 uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-const uint8_t mac_addr[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+const uint8_t mac_addr[] = {0x20, 0xE7, 0xC8, 0x59, 0x57, 0x64};
 
 
 esp_now_peer_info_t peerInfo;
@@ -23,14 +23,7 @@ void setup() {
   esp_now_register_recv_cb(OnDataReceive);
   esp_now_register_send_cb(OnDataSent);
 
-  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
-  peerInfo.channel = 1;
-  peerInfo.encrypt = false;
-
-  if(esp_now_add_peer(&peerInfo) != ESP_OK){
-    Serial.println("Failed to add peer");
-    return;
-  }
+  establishPeer(broadcastAddress, PEER_CHANNEL, PEER_ENCRYPT);
 }
 
 void loop() {

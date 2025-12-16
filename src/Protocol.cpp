@@ -3,6 +3,8 @@
 #include "Packet.hpp"
 #include "config.hpp"
 #include "utils.hpp"
+#include <cstdint>
+#include <esp_now.h>
 
 void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len){
   if(len < 10){
@@ -34,6 +36,7 @@ void OnDataSent(const uint8_t* mac_addr, esp_now_send_status_t status){
 
 void SendDiscoveryPacket(const uint8_t* broadcastAddress){
   DiscoveryPacket dsk_pkt;
+  Serial.print("Sending DIS\t");
   sendPacket(broadcastAddress, dsk_pkt);
   delay(DIS_BROADCAST_SPEED);
 }
@@ -56,6 +59,21 @@ void SendDataPacket(const uint8_t* dest) {
 
     DataPacket data_pkt(message, dest);
 
+    Serial.print("Sending DATA\t");
     sendPacket(dest, data_pkt);
+}
+
+// TODO: Possible reafctor to bool
+void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
+  esp_now_peer_info_t peer = {};
+  memcpy(peer.peer_addr, mac_addr, 6);
+  peer.channel = channel;
+  peer.encrypt = encrypt;
+
+  Serial.println("Peer Established");
+
+  if (esp_now_add_peer(&peer) != ESP_OK) {
+    Serial.println("Failed to add broadcast peer");
+  }
 }
 

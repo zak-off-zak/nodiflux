@@ -145,7 +145,6 @@ bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
 }
 
 void DataPacket::handle() {
-  Serial.printf("DataPacket handling here\n");
   this->ttl = this->ttl - 1;
   if(this->ttl > 0){
     uint8_t mac_bytes[6];
@@ -215,12 +214,12 @@ uint8_t DiscoveryPacket::checksum() const{
 void DiscoveryPacket::handle() {
   // Serial.println("Handling DiscoveryPacket:");
   //
-  // Serial.print("src: ");
+  // serial.print("src: ");
   // for (int i = 0; i < 6; i++) {
-  //   Serial.printf("%02X", src[i]);
-  //   if (i < 5) Serial.print(":");
+  //   serial.printf("%02x", src[i]);
+  //   if (i < 5) serial.print(":");
   // }
-  // Serial.println();
+  // serial.println();
   //
   // Serial.print("pkt_id: ");
   // Serial.println(pkt_id);
