@@ -162,6 +162,9 @@ void DataPacket::handle() {
     } else {
       sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
     }
+  } else {
+    // DEBUG ONLY
+    Serial.println("TTL 0 -> Dropping the packet");
   }
 }
 

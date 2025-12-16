@@ -10,6 +10,11 @@
 
 void NodeRegistry::updateNode(const uint8_t mac[6], time_t t) {
   std::lock_guard<std::mutex> lock(this->mtx);
+  const uint8_t banned_mac[] = {0x20, 0xE7, 0xC8, 0x59, 0x57, 0x64};
+  if (memcmp(mac, banned_mac, 6) == 0) {
+    Serial.println("BANNING!");
+    return;
+  }
   std::array<uint8_t, 6> key;
   std::copy(mac, mac+6, key.begin());
   if (this->nodes.find(key) == this->nodes.end()){
