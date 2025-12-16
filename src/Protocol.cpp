@@ -70,7 +70,12 @@ void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
   peer.channel = channel;
   peer.encrypt = encrypt;
 
-  Serial.println("Peer Established");
+  Serial.print("Peer Established:");
+  for (int i = 0; i < 6; i++) {
+    Serial.printf("%02x", mac_addr[i]);
+    if (i < 5) Serial.print(":");
+  }
+  Serial.println();
 
   if (esp_now_add_peer(&peer) != ESP_OK) {
     Serial.println("Failed to add broadcast peer");
