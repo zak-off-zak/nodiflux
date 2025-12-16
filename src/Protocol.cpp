@@ -65,6 +65,9 @@ void SendDataPacket(const uint8_t* dest) {
 
 // TODO: Possible reafctor to bool
 void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
+  if (esp_now_is_peer_exist(mac_addr)) {
+    return;
+  }
   esp_now_peer_info_t peer = {};
   memcpy(peer.peer_addr, mac_addr, 6);
   peer.channel = channel;
@@ -78,7 +81,7 @@ void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
   Serial.println();
 
   if (esp_now_add_peer(&peer) != ESP_OK) {
-    Serial.println("Failed to add broadcast peer");
+    Serial.println("Failed to add peer");
   }
 }
 

@@ -7,10 +7,6 @@
 uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 const uint8_t mac_addr[] = {0x20, 0xE7, 0xC8, 0x59, 0x57, 0x64};
 
-
-esp_now_peer_info_t peerInfo;
-
-
 void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_MODE_STA);
@@ -32,3 +28,4 @@ void loop() {
   // NodeRegistry::instance().debug();
   // NodeRegistry::instance().debugMostRecentNode();
 }
+
