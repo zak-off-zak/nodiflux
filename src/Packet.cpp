@@ -145,7 +145,6 @@ bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
 }
 
 void DataPacket::handle() {
-  printDataPacket(*this);
   this->ttl = this->ttl - 1;
   this->chs = this->checksum();
   if(this->ttl > 0){
