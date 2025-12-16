@@ -145,7 +145,9 @@ bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
 }
 
 void DataPacket::handle() {
+  printDataPacket(*this);
   this->ttl = this->ttl - 1;
+  this->chs = this->checksum();
   if(this->ttl > 0){
     uint8_t mac_bytes[6];
     macStringToBytes(WiFi.macAddress(), mac_bytes);
@@ -160,7 +162,12 @@ void DataPacket::handle() {
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
     } else {
-      sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
+      if(NodeRegistry::instance().peerExists(this->dest)){
+        Serial.println("Sending to dest!");
+        sendPacket(this->dest, *this);
+      }else{
+        sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
+      }
     }
   } else {
     // DEBUG ONLY

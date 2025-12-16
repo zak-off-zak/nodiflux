@@ -17,14 +17,14 @@ void setup() {
   }
 
   esp_now_register_recv_cb(OnDataReceive);
-  esp_now_register_send_cb(OnDataSent);
+  // esp_now_register_send_cb(OnDataSent);
 
   establishPeer(broadcastAddress, PEER_CHANNEL, PEER_ENCRYPT);
 }
 
 void loop() {
   SendDiscoveryPacket(broadcastAddress);
-  SendDataPacket(mac_addr);
+  // SendDataPacket(mac_addr);
   // NodeRegistry::instance().debug();
   // NodeRegistry::instance().debugMostRecentNode();
 }
