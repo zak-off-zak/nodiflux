@@ -1,5 +1,6 @@
 #include "Protocol.hpp"
 #include "HardwareSerial.h"
+#include "NodeRegistry.hpp"
 #include "Packet.hpp"
 #include "config.hpp"
 #include "utils.hpp"
@@ -46,7 +47,12 @@ void sendPacket(const uint8_t* mac_addr, const Packet& packet){
   size_t len = packet.serialize(buffer, sizeof(buffer));
   esp_err_t result = esp_now_send(mac_addr, buffer, len);
 
-  if (result != ESP_OK) Serial.println("Sending error");
+  if (result != ESP_OK){
+    Serial.println("No direct connection possible, rerouting!");
+    esp_err_t rerout_result = esp_now_send(NodeRegistry::instance().getMostRecentNode().data(), buffer, len);
+    if(rerout_result != ESP_OK) Serial.println("Rerouting error");
+
+  }
 }
 
 void SendDataPacket(const uint8_t* dest) {
