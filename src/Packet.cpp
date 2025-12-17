@@ -24,11 +24,13 @@ Packet* Packet::deserializeFactory(const uint8_t* buffer, size_t len){
   // TODO: Avoid double checking
   if(!pkt->deserializeFields(buffer, len)){
     delete pkt;
+    Serial.println("Unknown packet type: deserializeFactory failed\n");
     return nullptr;
   }
 
   if (pkt->getChecksum() != pkt->checksum()){
     delete pkt;
+    Serial.println("Unknown packet type: checksum mismatch\n");
     return nullptr;
   }
 
@@ -160,6 +162,7 @@ void DataPacket::handle() {
     if(equal){
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
+      Serial.println("Sending ACK");
       AcknowledgePacket ack_pkt(this->src, this->pkt_id);
       sendPacket(this->src, ack_pkt);
     } else {
@@ -315,7 +318,7 @@ uint8_t AcknowledgePacket::checksum() const{
 }
 
 bool AcknowledgePacket::deserializeFields(const uint8_t* buffer, size_t len){
-  if(len < 37) return false;
+  if(len < 19) return false;
 
   size_t offset = 0;
 
@@ -366,6 +369,32 @@ AcknowledgePacket::AcknowledgePacket(){}
 
 void AcknowledgePacket::handle() {
   //TODO: hadling logic here
-  Serial.printf("AcknowledgePacket handling here\n");
-  Serial.println(macBytesToString(this->src));
+  // Serial.printf("AcknowledgePacket handling here\n");
+  // Serial.println(macBytesToString(this->src));
+  this->ttl = this->ttl - 1;
+  this->chs = this->checksum();
+  if(this->ttl > 0){
+    uint8_t mac_bytes[6];
+    macStringToBytes(WiFi.macAddress(), mac_bytes);
+    bool equal = true;
+    for (size_t i = 0; i < 6; ++i) {
+        if (this->dest[i] != mac_bytes[i]) {
+            equal = false;
+            break;
+        }
+    }
+    if(equal){
+      Serial.print("ACK FROM: ");
+      Serial.println(macBytesToString(this->src));
+    } else {
+      if(NodeRegistry::instance().peerExists(this->dest)){
+        sendPacket(this->dest, *this);
+      }else{
+        sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
+      }
+    }
+  } else {
+    // DEBUG ONLY
+    Serial.println("TTL 0 -> Dropping the packet");
+  }
 }

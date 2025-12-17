@@ -17,14 +17,9 @@ void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len
   Packet* pkt = Packet::deserializeFactory(incomingData, len);
 
   if(pkt == nullptr){
-    Serial.println("Unknown packet type!\n");
     return;
   }else {
-    if(pkt->checksum() == pkt->getChecksum()){
-     pkt->handle();
-    } else {
-      Serial.print("Corrupted Packet: Checksums do not match\n");
-    }
+    pkt->handle();
   }
 
   delete pkt;
