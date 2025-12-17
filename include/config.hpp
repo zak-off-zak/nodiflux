@@ -4,5 +4,9 @@
 #define DATA_MESSAGE_SIZE 20
 #define DIS_BROADCAST_SPEED 2000
 #define NODE_DISCARD_THRESHOLD (10 * DIS_BROADCAST_SPEED)
+#define DATA_TTL 6
+#define ACK_TTL 6
+#define PEER_CHANNEL 1
+#define PEER_ENCRYPT false
 
 #endif

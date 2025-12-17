@@ -4,12 +4,22 @@
 #include <ctime>
 #include <limits>
 #include <mutex>
+#include "config.hpp"
+#include "Protocol.hpp"
 
 
 void NodeRegistry::updateNode(const uint8_t mac[6], time_t t) {
   std::lock_guard<std::mutex> lock(this->mtx);
+  // USED FOR TESTING ONLY
+  const uint8_t banned_mac[] = {0x20, 0xE7, 0xC8, 0x59, 0xE9, 0x18};
+  if (memcmp(mac, banned_mac, 6) == 0) {
+    return;
+  }
   std::array<uint8_t, 6> key;
   std::copy(mac, mac+6, key.begin());
+  if (this->nodes.find(key) == this->nodes.end()){
+    establishPeer(mac, PEER_CHANNEL, PEER_ENCRYPT);
+  }
   nodes[key] = t;
 }
 
@@ -29,6 +39,14 @@ std::array<uint8_t, 6> NodeRegistry::getMostRecentNode() const{
   }
   return result;
 }
+
+bool NodeRegistry::peerExists(const uint8_t mac[6]){
+  std::lock_guard<std::mutex> lock(mtx);
+  std::array<uint8_t, 6> key;
+  std::copy(mac, mac+6, key.begin());
+  return (this->nodes.find(key) != this->nodes.end());
+}
+
 
 void NodeRegistry::debug() const {
     std::lock_guard<std::mutex> lock(mtx);

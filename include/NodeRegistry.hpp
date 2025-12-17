@@ -34,6 +34,7 @@ class NodeRegistry{
 
     void updateNode(const uint8_t mac[6], time_t t);
     std::array<uint8_t, 6> getMostRecentNode() const;
+    bool peerExists(const uint8_t mac[6]);
     void debugMostRecentNode();
     void debug() const;
 };
