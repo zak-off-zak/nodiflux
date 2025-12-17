@@ -160,6 +160,8 @@ void DataPacket::handle() {
     if(equal){
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
+      // AcknowledgePacket ack_pkt(this->src, this->pkt_id);
+      // sendPacket(this->src, ack_pkt);
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){
         Serial.println("Sending to dest!");
@@ -338,7 +340,22 @@ bool AcknowledgePacket::deserializeFields(const uint8_t* buffer, size_t len){
   return true;
 }
 
+AcknowledgePacket::AcknowledgePacket(const uint8_t dest[6], const uint16_t packet_id){
+    this->type = PacketType::ACK;
+
+    uint8_t mac_bytes[6];
+    macStringToBytes(WiFi.macAddress(), mac_bytes);
+    memcpy(this->src, mac_bytes, 6);
+    memcpy(this->dest, dest, 6);
+
+    this->ttl = ACK_TTL;
+    this->pkt_id = packet_id;
+    this->chs = this->checksum();
+}
+
+AcknowledgePacket::AcknowledgePacket(){}
+
 void AcknowledgePacket::handle() {
   //TODO: hadling logic here
-  // Serial.printf("AcknowledgePacket handling here\n");
+  Serial.printf("AcknowledgePacket handling here\n");
 }
