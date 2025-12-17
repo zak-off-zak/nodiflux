@@ -35,14 +35,6 @@ class Packet {
     static Packet* deserializeFactory(const uint8_t* buffer, size_t len);
 };
 
-class DiscoveryPacket : public Packet {
-  public:
-    DiscoveryPacket();
-    size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
-    bool deserializeFields(const uint8_t* buffer, size_t len) override;
-    uint8_t checksum() const override;
-    void handle() override;
-};
 
 class AcknowledgePacket : public Packet {
   protected:
