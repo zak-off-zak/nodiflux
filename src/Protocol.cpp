@@ -38,6 +38,7 @@ void OnDataSent(const uint8_t* mac_addr, esp_now_send_status_t status){
 void SendDiscoveryPacket(const uint8_t* broadcastAddress){
   DiscoveryPacket dsk_pkt;
   sendPacket(broadcastAddress, dsk_pkt);
+  // TODO: Double check with the kernel task timing
   delay(DIS_BROADCAST_SPEED);
 }
 
@@ -50,22 +51,51 @@ void sendPacket(const uint8_t* mac_addr, const Packet& packet){
     Serial.println("No direct connection possible, rerouting!");
     esp_err_t rerout_result = esp_now_send(NodeRegistry::instance().getMostRecentNode().data(), buffer, len);
     if(rerout_result != ESP_OK) Serial.println("Rerouting error");
-
   }
 }
 
+// void SendDataPacket(const uint8_t* dest) {
+//     while (!Serial.available()) {
+//         delay(1);
+//     }
+//
+//     String input = Serial.readStringUntil('\n');
+//     std::string message = input.c_str();
+//
+//     DataPacket data_pkt(message, dest);
+//
+//     sendPacket(dest, data_pkt);
+// }
+
+
 void SendDataPacket(const uint8_t* dest) {
-    while (!Serial.available()) {
-        delay(1);
+    std::string message;
+    while (true) {
+        if (Serial.available()) {
+            char c = Serial.read();
+
+            if (c == '\n' || c == '\r') {
+                Serial.println();
+                break;
+            }
+
+            if (c == 8 || c == 127) {
+                if (!message.empty()) {
+                    message.pop_back();
+                    Serial.print("\b \b");
+                }
+                continue;
+            }
+
+            message.push_back(c);
+            Serial.print(c);
+        }
     }
 
-    String input = Serial.readStringUntil('\n');
-    std::string message = input.c_str();
-
     DataPacket data_pkt(message, dest);
-
     sendPacket(dest, data_pkt);
 }
+
 
 // TODO: Possible reafctor to bool
 void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
