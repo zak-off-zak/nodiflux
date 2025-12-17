@@ -35,41 +35,6 @@ class Packet {
     static Packet* deserializeFactory(const uint8_t* buffer, size_t len);
 };
 
-class DataPacket : public Packet {
-  protected:
-    uint8_t dest[6];
-    uint8_t ttl;
-    uint8_t msg[DATA_MESSAGE_SIZE];
-  public:
-    DataPacket(const std::string& message, const uint8_t dest[6]);
-    DataPacket();
-    size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
-    bool deserializeFields(const uint8_t* buffer, size_t len) override;
-    uint8_t checksum() const override;
-    void handle() override;
-};
 
-class DiscoveryPacket : public Packet {
-  public:
-    DiscoveryPacket();
-    size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
-    bool deserializeFields(const uint8_t* buffer, size_t len) override;
-    uint8_t checksum() const override;
-    void handle() override;
-};
-
-class AcknowledgePacket : public Packet {
-  protected:
-    uint16_t ack_pkt_id;
-    uint8_t dest[6];
-    uint8_t ttl;
-  public:
-    AcknowledgePacket(const uint8_t dest[6], const uint16_t packet_id);
-    AcknowledgePacket();
-    size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
-    bool deserializeFields(const uint8_t* buffer, size_t len) override;
-    uint8_t checksum() const override;
-    void handle() override;
-};
 
 #endif // !PACKET
