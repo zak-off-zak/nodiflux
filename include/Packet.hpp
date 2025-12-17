@@ -60,6 +60,7 @@ class DiscoveryPacket : public Packet {
 
 class AcknowledgePacket : public Packet {
   protected:
+    uint16_t ack_pkt_id;
     uint8_t dest[6];
     uint8_t ttl;
   public:

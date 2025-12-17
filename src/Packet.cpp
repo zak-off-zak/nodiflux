@@ -160,8 +160,8 @@ void DataPacket::handle() {
     if(equal){
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
-      // AcknowledgePacket ack_pkt(this->src, this->pkt_id);
-      // sendPacket(this->src, ack_pkt);
+      AcknowledgePacket ack_pkt(this->src, this->pkt_id);
+      sendPacket(this->src, ack_pkt);
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){
         Serial.println("Sending to dest!");
@@ -269,6 +269,7 @@ size_t AcknowledgePacket::serialize(uint8_t* buffer, size_t buffer_size) const {
   // PacketType type;
   // uint8_t src[6];
   // uint16_t pkt_id;
+  // uint16_t ack_pkt_id;
   // uint8_t dest[6];
   // uint8_t ttl;
   // uint8_t chs;
@@ -285,6 +286,9 @@ size_t AcknowledgePacket::serialize(uint8_t* buffer, size_t buffer_size) const {
   if(offset + 2 > buffer_size) return offset;
   writeLE16(buffer, offset, this->pkt_id);
 
+  if(offset + 2 > buffer_size) return offset;
+  writeLE16(buffer, offset, this->ack_pkt_id);
+
   if(offset + 6 > buffer_size) return offset;
   memcpy(buffer + offset, this->dest, 6);
   offset += 6;
@@ -300,9 +304,9 @@ size_t AcknowledgePacket::serialize(uint8_t* buffer, size_t buffer_size) const {
 
 uint8_t AcknowledgePacket::checksum() const{
   // Could be done diretly on field to save memory
-  // Size of the packet is 17
+  // Size of the packet is 19
   uint8_t cs = 0;
-  uint8_t bytes[17];
+  uint8_t bytes[19];
   size_t len = this->serialize(bytes, sizeof(bytes));
   for(size_t i = 0; i < len - 1; i++){
     cs ^= bytes[i];
@@ -327,6 +331,10 @@ bool AcknowledgePacket::deserializeFields(const uint8_t* buffer, size_t len){
   this->pkt_id = readLE16(buffer, offset);
   offset += 2;
 
+  if(offset + 2 > len) return false;
+  this->ack_pkt_id = readLE16(buffer, offset);
+  offset += 2;
+
   if(offset + 6 > len) return false;
   memcpy(this->dest, buffer + offset, 6);
   offset += 6;
@@ -349,7 +357,8 @@ AcknowledgePacket::AcknowledgePacket(const uint8_t dest[6], const uint16_t packe
     memcpy(this->dest, dest, 6);
 
     this->ttl = ACK_TTL;
-    this->pkt_id = packet_id;
+    this->pkt_id = generatePktId(this->src);
+    this->ack_pkt_id = packet_id;
     this->chs = this->checksum();
 }
 
@@ -358,4 +367,5 @@ AcknowledgePacket::AcknowledgePacket(){}
 void AcknowledgePacket::handle() {
   //TODO: hadling logic here
   Serial.printf("AcknowledgePacket handling here\n");
+  Serial.println(macBytesToString(this->src));
 }
