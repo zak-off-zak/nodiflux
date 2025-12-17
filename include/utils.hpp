@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <Arduino.h>
 #include <cstdio>
+#include <string>
 
 inline void writeLE16(uint8_t* buffer, size_t& offset, uint16_t value){
   buffer[offset++] = value & 0xFF;
@@ -28,6 +29,17 @@ inline void macStringToBytes(const String& macStr, uint8_t mac[6]) {
           &values[0], &values[1], &values[2],
           &values[3], &values[4], &values[5]);
   for (int i = 0; i < 6; i++) mac[i] = static_cast<uint8_t>(values[i]);
+}
+
+inline String macBytesToString(const uint8_t mac_bytes[6]) {
+    char buffer[18];
+    std::snprintf(
+        buffer, sizeof(buffer),
+        "%02X:%02X:%02X:%02X:%02X:%02X",
+        mac_bytes[0], mac_bytes[1], mac_bytes[2],
+        mac_bytes[3], mac_bytes[4], mac_bytes[5]
+    );
+    return String(buffer);
 }
 
 #endif // !UTILS

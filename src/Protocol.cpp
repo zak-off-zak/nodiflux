@@ -13,6 +13,7 @@ void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len
     return;
   }
 
+
   Packet* pkt = Packet::deserializeFactory(incomingData, len);
 
   if(pkt == nullptr){
@@ -20,7 +21,7 @@ void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len
     return;
   }else {
     if(pkt->checksum() == pkt->getChecksum()){
-      pkt->handle();
+     pkt->handle();
     } else {
       Serial.print("Corrupted Packet: Checksums do not match\n");
     }
@@ -54,27 +55,22 @@ void sendPacket(const uint8_t* mac_addr, const Packet& packet){
   }
 }
 
-// void SendDataPacket(const uint8_t* dest) {
-//     while (!Serial.available()) {
-//         delay(1);
-//     }
-//
-//     String input = Serial.readStringUntil('\n');
-//     std::string message = input.c_str();
-//
-//     DataPacket data_pkt(message, dest);
-//
-//     sendPacket(dest, data_pkt);
-// }
-
-
+// TODO: REMOVE, debug only
 void SendDataPacket(const uint8_t* dest) {
     std::string message;
+    bool seenCR = false;
+
     while (true) {
         if (Serial.available()) {
             char c = Serial.read();
 
-            if (c == '\n' || c == '\r') {
+            if (seenCR && c == '\n') {
+                Serial.println();
+                break;
+            }
+
+            if (c == '\r' || c == '\n') {
+                seenCR = (c == '\r');
                 Serial.println();
                 break;
             }
@@ -87,10 +83,13 @@ void SendDataPacket(const uint8_t* dest) {
                 continue;
             }
 
+            seenCR = false;
             message.push_back(c);
             Serial.print(c);
         }
     }
+
+    if (message.empty()) return;
 
     DataPacket data_pkt(message, dest);
     sendPacket(dest, data_pkt);
