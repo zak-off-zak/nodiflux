@@ -1,4 +1,5 @@
 #include "Protocol.hpp"
+#include "DataPacket.hpp"
 #include "HardwareSerial.h"
 #include "NodeRegistry.hpp"
 #include "Packet.hpp"
