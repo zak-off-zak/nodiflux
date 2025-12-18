@@ -20,7 +20,9 @@ void NodeRegistry::updateNode(const uint8_t mac[6], time_t t) {
   if (this->nodes.find(key) == this->nodes.end()){
     establishPeer(mac, PEER_CHANNEL, PEER_ENCRYPT);
   }
-  nodes[key] = t;
+  if(this->nodes.size() < NODE_REGISTRY_SIZE){
+    this->nodes[key] = t;
+  }
 }
 
 std::array<uint8_t, 6> NodeRegistry::getMostRecentNode() const{
@@ -30,7 +32,7 @@ std::array<uint8_t, 6> NodeRegistry::getMostRecentNode() const{
   time_t min_score = std::numeric_limits<time_t>::max();
   time_t score = 0;
   time_t now = std::time(nullptr);
-  for (const auto& [mac, lastSeen] : nodes){
+  for (const auto& [mac, lastSeen] :this->nodes){
     score = std::difftime(now, lastSeen);
     if(score < min_score){
       result = mac;

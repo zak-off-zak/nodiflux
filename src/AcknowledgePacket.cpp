@@ -1,6 +1,7 @@
 #include "AcknowledgePacket.hpp"
 #include "NodeRegistry.hpp"
 #include "Protocol.hpp"
+#include "RetryJournal.hpp"
 #include "config.hpp"
 #include "utils.hpp"
 
@@ -111,7 +112,6 @@ AcknowledgePacket::AcknowledgePacket(const uint8_t dest[6], const uint16_t packe
 AcknowledgePacket::AcknowledgePacket(){}
 
 void AcknowledgePacket::handle() {
-  //TODO: hadling logic here
   // Serial.printf("AcknowledgePacket handling here\n");
   // Serial.println(macBytesToString(this->src));
   this->ttl = this->ttl - 1;
@@ -129,6 +129,7 @@ void AcknowledgePacket::handle() {
     if(equal){
       Serial.print("ACK FROM: ");
       Serial.println(macBytesToString(this->src));
+      RetryJournal::instance().deleteEntry(this->ack_pkt_id);
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){
         sendPacket(this->dest, *this);

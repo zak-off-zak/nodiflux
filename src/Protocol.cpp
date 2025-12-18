@@ -4,12 +4,13 @@
 #include "HardwareSerial.h"
 #include "NodeRegistry.hpp"
 #include "Packet.hpp"
+#include "RetryJournal.hpp"
 #include "config.hpp"
 #include "utils.hpp"
 #include <cstdint>
 #include <esp_now.h>
 
-void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len){
+void onDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len){
   if(len < 10){
     Serial.print("TOO LITTLE DATA RECIVED!\n");
     return;
@@ -27,13 +28,13 @@ void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len
   delete pkt;
 }
 
-void OnDataSent(const uint8_t* mac_addr, esp_now_send_status_t status){
+void onDataSent(const uint8_t* mac_addr, esp_now_send_status_t status){
   Serial.print("\r\nLast Packet Send Status:");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
 }
 
 
-void SendDiscoveryPacket(const uint8_t* broadcastAddress){
+void sendDiscoveryPacket(const uint8_t* broadcastAddress){
   DiscoveryPacket dsk_pkt;
   sendPacket(broadcastAddress, dsk_pkt);
   // TODO: Double check with the kernel task timing
@@ -41,19 +42,23 @@ void SendDiscoveryPacket(const uint8_t* broadcastAddress){
 }
 
 void sendPacket(const uint8_t* mac_addr, const Packet& packet){
+  if (packet.getType() == PacketType::DAT) {
+    const DataPacket& dp = static_cast<const DataPacket&>(packet);
+    RetryJournal::instance().addEntry(dp);
+  }
+
   uint8_t buffer[DATA_MESSAGE_SIZE + 17];
   size_t len = packet.serialize(buffer, sizeof(buffer));
   esp_err_t result = esp_now_send(mac_addr, buffer, len);
 
   if (result != ESP_OK){
-    Serial.println("No direct connection possible, rerouting!");
     esp_err_t rerout_result = esp_now_send(NodeRegistry::instance().getMostRecentNode().data(), buffer, len);
-    if(rerout_result != ESP_OK) Serial.println("Rerouting error");
+    if(rerout_result != ESP_OK) Serial.println("Exception: Rerouting is not possible");
   }
 }
 
 // TODO: REMOVE, debug only
-void SendDataPacket(const uint8_t* dest) {
+void sendDataPacket(const uint8_t* dest) {
     std::string message;
     bool seenCR = false;
 
@@ -62,13 +67,11 @@ void SendDataPacket(const uint8_t* dest) {
             char c = Serial.read();
 
             if (seenCR && c == '\n') {
-                Serial.println();
                 break;
             }
 
             if (c == '\r' || c == '\n') {
                 seenCR = (c == '\r');
-                Serial.println();
                 break;
             }
 
@@ -85,6 +88,7 @@ void SendDataPacket(const uint8_t* dest) {
             Serial.print(c);
         }
     }
+    Serial.println();
 
     if (message.empty()) return;
 
@@ -114,4 +118,3 @@ void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
     Serial.println("Failed to add peer");
   }
 }
-

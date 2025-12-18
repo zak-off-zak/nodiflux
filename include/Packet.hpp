@@ -25,6 +25,7 @@ class Packet {
   public:
     PacketType getType() const { return this->type; }
     uint8_t getChecksum() const { return this->chs; }
+    uint16_t getPacketId() const {return this->pkt_id; }
 
     virtual ~Packet() = default;
     virtual size_t serialize(uint8_t* buffer, size_t buffer_size) const = 0;

@@ -137,7 +137,6 @@ void DataPacket::handle() {
     if(equal){
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
-      Serial.println("Sending ACK");
       AcknowledgePacket ack_pkt(this->src, this->pkt_id);
       sendPacket(this->src, ack_pkt);
     } else {
