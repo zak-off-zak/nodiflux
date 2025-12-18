@@ -42,14 +42,18 @@ void sendDiscoveryPacket(const uint8_t* broadcastAddress){
 }
 
 void sendPacket(const uint8_t* mac_addr, const Packet& packet){
+  if (packet.getType() == PacketType::DAT) {
+    const DataPacket& dp = static_cast<const DataPacket&>(packet);
+    RetryJournal::instance().addEntry(dp);
+  }
+
   uint8_t buffer[DATA_MESSAGE_SIZE + 17];
   size_t len = packet.serialize(buffer, sizeof(buffer));
   esp_err_t result = esp_now_send(mac_addr, buffer, len);
 
   if (result != ESP_OK){
-    Serial.println("No direct connection possible, rerouting!");
     esp_err_t rerout_result = esp_now_send(NodeRegistry::instance().getMostRecentNode().data(), buffer, len);
-    if(rerout_result != ESP_OK) Serial.println("Rerouting error");
+    if(rerout_result != ESP_OK) Serial.println("Exception: Rerouting is not possible");
   }
 }
 
@@ -63,13 +67,11 @@ void sendDataPacket(const uint8_t* dest) {
             char c = Serial.read();
 
             if (seenCR && c == '\n') {
-                Serial.println();
                 break;
             }
 
             if (c == '\r' || c == '\n') {
                 seenCR = (c == '\r');
-                Serial.println();
                 break;
             }
 
@@ -86,11 +88,11 @@ void sendDataPacket(const uint8_t* dest) {
             Serial.print(c);
         }
     }
+    Serial.println();
 
     if (message.empty()) return;
 
     DataPacket data_pkt(message, dest);
-    RetryJournal::instance().addEntry(data_pkt);
     sendPacket(dest, data_pkt);
 }
 

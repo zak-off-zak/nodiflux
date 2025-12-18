@@ -8,7 +8,7 @@
 #define ACK_TTL 6
 #define PEER_CHANNEL 1
 #define PEER_ENCRYPT false
-#define RETRY_TIME_THRESHOLD 2000
+#define RETRY_TIME_THRESHOLD 2
 #define RETRY_CNT_THRESHOLD 3
 
 #endif

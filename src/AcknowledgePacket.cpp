@@ -130,7 +130,7 @@ void AcknowledgePacket::handle() {
     if(equal){
       Serial.print("ACK FROM: ");
       Serial.println(macBytesToString(this->src));
-      RetryJournal::instance().deleteEntry(this->pkt_id);
+      RetryJournal::instance().deleteEntry(this->ack_pkt_id);
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){
         sendPacket(this->dest, *this);
