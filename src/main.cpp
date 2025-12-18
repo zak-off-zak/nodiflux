@@ -4,26 +4,11 @@
 #include <esp_now.h>
 #include "Protocol.hpp"
 #include "config.hpp"
-#include "freertos/portmacro.h"
+#include "Tasks.hpp"
 
 uint8_t broadcastAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 const uint8_t mac_addr[] = {0x20, 0xE7, 0xC8, 0x59, 0xE9, 0x18};
 
-void discoveryTask(void *param){
-  uint8_t* addr = (uint8_t*) param;
-  while(true){
-    SendDiscoveryPacket(addr);
-    vTaskDelay(DIS_BROADCAST_SPEED / portTICK_PERIOD_MS);
-  }
-}
-
-void dataTask(void *param){
-  uint8_t* addr = (uint8_t*) param;
-  while(true){
-    SendDataPacket(addr);
-    vTaskDelay(DIS_BROADCAST_SPEED / portTICK_PERIOD_MS);
-  }
-}
 
 void setup() {
   Serial.begin(115200);
