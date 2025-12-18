@@ -20,7 +20,9 @@ void NodeRegistry::updateNode(const uint8_t mac[6], time_t t) {
   if (this->nodes.find(key) == this->nodes.end()){
     establishPeer(mac, PEER_CHANNEL, PEER_ENCRYPT);
   }
-  nodes[key] = t;
+  if(this->nodes.size() < NODE_REGISTRY_SIZE){
+    this->nodes[key] = t;
+  }
 }
 
 std::array<uint8_t, 6> NodeRegistry::getMostRecentNode() const{

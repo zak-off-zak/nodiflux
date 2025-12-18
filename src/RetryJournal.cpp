@@ -21,8 +21,9 @@ void RetryJournal::addEntry(const DataPacket& pkt){
       }
       );
 
-  // TODO: Add a cap of entries
-  this->entries.emplace(pkt.getPacketId(), std::move(new_entry));
+  if(this->entries.size() < RETRY_JOURNAL_SIZE){
+    this->entries.emplace(pkt.getPacketId(), std::move(new_entry));
+  }
 }
 
 

@@ -112,7 +112,6 @@ AcknowledgePacket::AcknowledgePacket(const uint8_t dest[6], const uint16_t packe
 AcknowledgePacket::AcknowledgePacket(){}
 
 void AcknowledgePacket::handle() {
-  //TODO: hadling logic here
   // Serial.printf("AcknowledgePacket handling here\n");
   // Serial.println(macBytesToString(this->src));
   this->ttl = this->ttl - 1;
