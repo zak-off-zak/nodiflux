@@ -2,6 +2,7 @@
 #include "DataPacket.hpp"
 #include "Protocol.hpp"
 #include "config.hpp"
+#include "utils.hpp"
 #include <ctime>
 #include <memory>
 #include <mutex>
@@ -18,6 +19,7 @@ void RetryJournal::addEntry(const DataPacket& pkt){
         0
       }
       );
+  Serial.println("Pushing to the Joutnal");
 
   // TODO: Add a cap of entries
   this->entries.emplace(pkt.getPacketId(), std::move(new_entry));
@@ -55,6 +57,8 @@ void RetryJournal::executeRetries(){
 
 
   for(auto& pkt: to_send){
+    Serial.print("Retrying to send a packet:");
+    Serial.println(pkt.getPacketId());
     sendPacket(pkt.getDest(), pkt);
   }
 

@@ -90,6 +90,7 @@ void sendDataPacket(const uint8_t* dest) {
     if (message.empty()) return;
 
     DataPacket data_pkt(message, dest);
+    RetryJournal::instance().addEntry(data_pkt);
     sendPacket(dest, data_pkt);
 }
 

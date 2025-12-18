@@ -1,6 +1,7 @@
 #include "AcknowledgePacket.hpp"
 #include "NodeRegistry.hpp"
 #include "Protocol.hpp"
+#include "RetryJournal.hpp"
 #include "config.hpp"
 #include "utils.hpp"
 
@@ -129,6 +130,7 @@ void AcknowledgePacket::handle() {
     if(equal){
       Serial.print("ACK FROM: ");
       Serial.println(macBytesToString(this->src));
+      RetryJournal::instance().deleteEntry(this->pkt_id);
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){
         sendPacket(this->dest, *this);

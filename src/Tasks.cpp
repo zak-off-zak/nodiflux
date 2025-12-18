@@ -23,6 +23,6 @@ void dataTask(void *param){
 void retryTask(void *param){
   while(true){
     RetryJournal::instance().executeRetries();
-    vTaskDelay(DIS_BROADCAST_SPEED / portTICK_PERIOD_MS);
+    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
