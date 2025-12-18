@@ -30,7 +30,7 @@ std::array<uint8_t, 6> NodeRegistry::getMostRecentNode() const{
   time_t min_score = std::numeric_limits<time_t>::max();
   time_t score = 0;
   time_t now = std::time(nullptr);
-  for (const auto& [mac, lastSeen] : nodes){
+  for (const auto& [mac, lastSeen] :this->nodes){
     score = std::difftime(now, lastSeen);
     if(score < min_score){
       result = mac;

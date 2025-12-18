@@ -31,6 +31,7 @@ class RetryJournal {
 
     void addEntry(const DataPacket& pkt);
     bool deleteEntry(const uint16_t pkt_id);
+    void executeRetries();
 };
 
 

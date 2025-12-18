@@ -19,19 +19,20 @@ void setup() {
     return; // TODO: Error handling or retry
   }
 
-  esp_now_register_recv_cb(OnDataReceive);
-  // esp_now_register_send_cb(OnDataSent);
+  esp_now_register_recv_cb(onDataReceive);
+  // esp_now_register_send_cb(onDataSent);
 
   establishPeer(broadcastAddress, PEER_CHANNEL, PEER_ENCRYPT);
 
-  xTaskCreatePinnedToCore(discoveryTask, "discoveryTask", 4096, (void*)broadcastAddress, 1, NULL, 0);
-  xTaskCreatePinnedToCore(dataTask, "dataTask", 4096, (void*)mac_addr, 1, NULL, 1);
+  xTaskCreatePinnedToCore(discoveryTask, "discoveryTask", 4096, (void*)broadcastAddress, 1, NULL, 1);
+  xTaskCreatePinnedToCore(retryTask, "retryTask", 4096, NULL, 2, NULL, 1);
+  xTaskCreatePinnedToCore(dataTask, "dataTask", 4096, (void*)mac_addr, 1, NULL, 0);
 }
 
 
 void loop() {
-  // SendDiscoveryPacket(broadcastAddress);
-  // SendDataPacket(mac_addr);
+  // sendDiscoveryPacket(broadcastAddress);
+  // sendDataPacket(mac_addr);
   // NodeRegistry::instance().debug();
   // NodeRegistry::instance().debugMostRecentNode();
 }

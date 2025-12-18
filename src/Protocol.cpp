@@ -4,12 +4,13 @@
 #include "HardwareSerial.h"
 #include "NodeRegistry.hpp"
 #include "Packet.hpp"
+#include "RetryJournal.hpp"
 #include "config.hpp"
 #include "utils.hpp"
 #include <cstdint>
 #include <esp_now.h>
 
-void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len){
+void onDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len){
   if(len < 10){
     Serial.print("TOO LITTLE DATA RECIVED!\n");
     return;
@@ -27,13 +28,13 @@ void OnDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len
   delete pkt;
 }
 
-void OnDataSent(const uint8_t* mac_addr, esp_now_send_status_t status){
+void onDataSent(const uint8_t* mac_addr, esp_now_send_status_t status){
   Serial.print("\r\nLast Packet Send Status:");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
 }
 
 
-void SendDiscoveryPacket(const uint8_t* broadcastAddress){
+void sendDiscoveryPacket(const uint8_t* broadcastAddress){
   DiscoveryPacket dsk_pkt;
   sendPacket(broadcastAddress, dsk_pkt);
   // TODO: Double check with the kernel task timing
@@ -53,7 +54,7 @@ void sendPacket(const uint8_t* mac_addr, const Packet& packet){
 }
 
 // TODO: REMOVE, debug only
-void SendDataPacket(const uint8_t* dest) {
+void sendDataPacket(const uint8_t* dest) {
     std::string message;
     bool seenCR = false;
 
@@ -114,4 +115,3 @@ void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
     Serial.println("Failed to add peer");
   }
 }
-
