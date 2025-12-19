@@ -26,7 +26,6 @@ class BLEController {
 
     void init();
     bool transmit(const std::string& msg);
-
 };
 
 class RxCallbacks : public NimBLECharacteristicCallbacks{
