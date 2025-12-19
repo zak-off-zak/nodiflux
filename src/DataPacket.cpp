@@ -5,6 +5,7 @@
 #include "Protocol.hpp"
 #include "config.hpp"
 #include "utils.hpp"
+#include "BLE.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -137,6 +138,8 @@ void DataPacket::handle() {
     if(equal){
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
+      // TODO: Double check the correctness of reinterpret_cast
+      BLEController::instance().transmit(std::string(reinterpret_cast<char*>(this->msg), DATA_MESSAGE_SIZE));
       AcknowledgePacket ack_pkt(this->src, this->pkt_id);
       sendPacket(this->src, ack_pkt);
     } else {
