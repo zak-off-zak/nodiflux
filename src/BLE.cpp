@@ -14,15 +14,15 @@ void RxCallbacks::onWrite(NimBLECharacteristic* ch, NimBLEConnInfo& connInfo) {
   Serial.println(value.c_str());
 }
 
-void initBLE(){
+void BLEController::init(){
   NimBLEDevice::init("ESP-NODE");
 
   NimBLEServer* server = NimBLEDevice::createServer();
   NimBLEService* service = server->createService(SERVICE_UUID);
 
-  NimBLECharacteristic* rxCharacteristic = service->createCharacteristic(RX_CHARACTERISTIC_UUID, NIMBLE_PROPERTY::WRITE);
-  NimBLECharacteristic* txCharacteristic = service->createCharacteristic(TX_CHARACTERISTIC_UUID, NIMBLE_PROPERTY::NOTIFY);
-  rxCharacteristic->setCallbacks(new RxCallbacks());
+  this->rx = service->createCharacteristic(RX_CHARACTERISTIC_UUID, NIMBLE_PROPERTY::WRITE);
+  this->tx = service->createCharacteristic(TX_CHARACTERISTIC_UUID, NIMBLE_PROPERTY::NOTIFY);
+  this->rx->setCallbacks(new RxCallbacks());
 
   service->start();
 
@@ -34,3 +34,9 @@ void initBLE(){
   Serial.println("BLE STARTED");
 }
 
+bool BLEController::transmit(const std::string& msg){
+  if (!this->tx) return false;
+  this->tx->setValue(msg);
+  this->tx->notify();
+  return true;
+}
