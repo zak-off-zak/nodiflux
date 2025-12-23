@@ -4,6 +4,7 @@
 #include "RetryJournal.hpp"
 #include "config.hpp"
 #include "utils.hpp"
+#include "RRTesting.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -127,8 +128,12 @@ void AcknowledgePacket::handle() {
         }
     }
     if(equal){
-      Serial.print("ACK FROM: ");
-      Serial.println(macBytesToString(this->src));
+      if(TESTING_ENABLED){
+        onTestAckReceived(this);
+      } else {
+        Serial.print("ACK FROM: ");
+        Serial.println(macBytesToString(this->src));
+      }
       RetryJournal::instance().deleteEntry(this->ack_pkt_id);
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){

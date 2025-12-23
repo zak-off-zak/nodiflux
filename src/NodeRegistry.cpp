@@ -11,9 +11,11 @@
 void NodeRegistry::updateNode(const uint8_t mac[6], time_t t) {
   std::lock_guard<std::mutex> lock(this->mtx);
   // USED FOR TESTING ONLY
-  const uint8_t banned_mac[] = {0x20, 0xE7, 0xC8, 0x59, 0xE9, 0x18};
-  if (memcmp(mac, banned_mac, 6) == 0) {
-    return;
+  if(TESTING_ENABLED){
+    const uint8_t banned_mac[] = {0x20, 0xE7, 0xC8, 0x5A, 0x2D, 0x18};
+    if (memcmp(mac, banned_mac, 6) == 0) {
+      return;
+    }
   }
   std::array<uint8_t, 6> key;
   std::copy(mac, mac+6, key.begin());
