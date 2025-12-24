@@ -140,8 +140,14 @@ void DataPacket::handle() {
       Serial.println((char*)this->msg);
       // TODO: Double check the correctness of reinterpret_cast
       BLEController::instance().transmit(std::string(reinterpret_cast<char*>(this->msg), DATA_MESSAGE_SIZE));
-      AcknowledgePacket ack_pkt(this->src, this->pkt_id);
-      sendPacket(this->src, ack_pkt);
+      if(TESTING_ENABLED){
+        uint16_t seq = static_cast<uint16_t>(atoi(reinterpret_cast<char*>(this->msg)));
+        AcknowledgePacket ack_pkt(this->src, seq);
+        sendPacket(this->src, ack_pkt);
+      } else {
+        AcknowledgePacket ack_pkt(this->src, this->pkt_id);
+        sendPacket(this->src, ack_pkt);
+      }
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){
         Serial.println("Sending to dest!");

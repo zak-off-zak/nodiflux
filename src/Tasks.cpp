@@ -2,6 +2,8 @@
 #include "RetryJournal.hpp"
 #include "config.hpp"
 #include "Protocol.hpp"
+#include "RRTesting.hpp"
+#include "HardwareSerial.h"
 #include "freertos/portmacro.h"
 
 void discoveryTask(void *param){
@@ -26,3 +28,17 @@ void retryTask(void *param){
     vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
+
+void rrTestTask(void *param) {
+    Serial.println("[RR] RRTest task started");
+
+    RRTest();
+
+    Serial.println("[RR] RRTest task finished");
+    vTaskDelete(NULL); // self-destruct
+}
+
+void serialCommandTask(void *param) {
+  RRTestTrigger();
+}
+

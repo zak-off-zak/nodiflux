@@ -12,6 +12,7 @@ class AcknowledgePacket : public Packet {
     uint8_t dest[6];
     uint8_t ttl;
   public:
+    uint16_t getAckPacketId() {return this->ack_pkt_id; }
     AcknowledgePacket(const uint8_t dest[6], const uint16_t packet_id);
     AcknowledgePacket();
     size_t serialize(uint8_t* buffer, size_t buffer_size) const override;

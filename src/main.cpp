@@ -27,16 +27,15 @@ void setup() {
 
   xTaskCreatePinnedToCore(discoveryTask, "discoveryTask", 4096, (void*)broadcastAddress, 1, NULL, 1);
   xTaskCreatePinnedToCore(retryTask, "retryTask", 4096, NULL, 2, NULL, 1);
-  xTaskCreatePinnedToCore(dataTask, "dataTask", 4096, (void*)mac_addr, 1, NULL, 1);
+  if(TESTING_ENABLED){
+    xTaskCreatePinnedToCore(serialCommandTask, "serialCommandTask", 4096, NULL, 2, NULL, 1);
+  }
+  // xTaskCreatePinnedToCore(dataTask, "dataTask", 4096, (void*)mac_addr, 1, NULL, 1);
 
   BLEController::instance().init();
 }
 
 
 void loop() {
-  // sendDiscoveryPacket(broadcastAddress);
-  // sendDataPacket(mac_addr);
-  // NodeRegistry::instance().debug();
-  // NodeRegistry::instance().debugMostRecentNode();
 }
 
