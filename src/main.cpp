@@ -5,6 +5,7 @@
 #include "Protocol.hpp"
 #include "WiFiAPI.hpp"
 #include "config.hpp"
+#include "env.hpp"
 #include "Tasks.hpp"
 #include "BLE.hpp"
 
@@ -17,10 +18,22 @@ void setup() {
 
   // Setting up WiFi
   WiFi.mode(WIFI_AP_STA);
-  bool ok = WiFi.softAP(WSS_SSID, WSS_PASSWORD, PEER_CHANNEL);
+  bool ok = WiFi.softAP(WSS_SSID_AP, WSS_PASSWORD_AP, PEER_CHANNEL);
   Serial.printf("SoftAP start: %s\n", ok ? "OK" : "FAILED");
   Serial.print("AP IP: ");
   Serial.println(WiFi.softAPIP());
+  
+  // WiFi.mode(WIFI_STA);
+  // WiFi.begin(WSS_SSID, WSS_PASSWORD);
+  //
+  // while (WiFi.status() != WL_CONNECTED) {
+  //   delay(500);
+  //   Serial.print(".");
+  // }
+  // Serial.println("Connected! IP address: ");
+  // Serial.println(WiFi.localIP());
+  // Serial.print("Connected Wi-Fi channel: ");
+  // Serial.println(WiFi.channel());
 
   // Setting up ESP-NOW
   if(esp_now_init() != ESP_OK){

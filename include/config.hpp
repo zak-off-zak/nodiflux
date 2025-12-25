@@ -6,7 +6,7 @@
 #define NODE_DISCARD_THRESHOLD (10 * DIS_BROADCAST_SPEED)
 #define DATA_TTL 6
 #define ACK_TTL 6
-#define PEER_CHANNEL 1
+#define PEER_CHANNEL 11 // Align with the channel of the WIFI network
 #define PEER_ENCRYPT false
 #define RETRY_TIME_THRESHOLD 2
 #define RETRY_CNT_THRESHOLD 3
@@ -14,8 +14,4 @@
 #define NODE_REGISTRY_SIZE 10
 #define TESTING_ENABLED 0
 
-// WARNING: Please make sure to keep those secret
-#define WSS_SSID "ESP_NODE"
-#define WSS_PASSWORD "123456789"
-
-#endif
+#endif // !CONFIG
