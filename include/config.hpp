@@ -12,6 +12,10 @@
 #define RETRY_CNT_THRESHOLD 3
 #define RETRY_JOURNAL_SIZE 10
 #define NODE_REGISTRY_SIZE 10
-#define TESTING_ENABLED 1
+#define TESTING_ENABLED 0
+
+// WARNING: Please make sure to keep those secret
+#define WSS_SSID "ESP_NODE"
+#define WSS_PASSWORD "123456789"
 
 #endif

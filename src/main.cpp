@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <esp_now.h>
 #include "Protocol.hpp"
+#include "WiFiAPI.hpp"
 #include "config.hpp"
 #include "Tasks.hpp"
 #include "BLE.hpp"
@@ -13,8 +14,15 @@ const uint8_t mac_addr[] = {0x20, 0xE7, 0xC8, 0x59, 0xE9, 0x18};
 
 void setup() {
   Serial.begin(115200);
-  WiFi.mode(WIFI_MODE_STA);
 
+  // Setting up WiFi
+  WiFi.mode(WIFI_AP_STA);
+  bool ok = WiFi.softAP(WSS_SSID, WSS_PASSWORD, PEER_CHANNEL);
+  Serial.printf("SoftAP start: %s\n", ok ? "OK" : "FAILED");
+  Serial.print("AP IP: ");
+  Serial.println(WiFi.softAPIP());
+
+  // Setting up ESP-NOW
   if(esp_now_init() != ESP_OK){
     Serial.print("\r\nError initializing ESP-NOW\n");
     return; // TODO: Error handling or retry
@@ -33,6 +41,7 @@ void setup() {
   // xTaskCreatePinnedToCore(dataTask, "dataTask", 4096, (void*)mac_addr, 1, NULL, 1);
 
   BLEController::instance().init();
+  initWS();
 }
 
 
