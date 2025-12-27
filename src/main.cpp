@@ -51,7 +51,9 @@ void setup() {
   if(TESTING_ENABLED){
     xTaskCreatePinnedToCore(serialCommandTask, "serialCommandTask", 4096, NULL, 2, NULL, 1);
   }
-  // xTaskCreatePinnedToCore(dataTask, "dataTask", 4096, (void*)mac_addr, 1, NULL, 1);
+  if(SERIAL_MESSAGE_SENDING_ENABLED){
+    xTaskCreatePinnedToCore(dataTask, "dataTask", 4096, (void*)mac_addr, 1, NULL, 1);
+  }
 
   BLEController::instance().init();
   initWS();
