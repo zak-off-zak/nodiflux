@@ -6,12 +6,14 @@
 #include "config.hpp"
 #include "utils.hpp"
 #include "BLE.hpp"
+#include "WiFiAPI.hpp"
 
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
 #include <cstdlib>
 #include <WiFi.h>
+#include <string>
 
 DataPacket::DataPacket(){
 }
@@ -138,8 +140,16 @@ void DataPacket::handle() {
     if(equal){
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
-      // TODO: Double check the correctness of reinterpret_cast
+      // Sending data over WebSocket
+      std::string payload;
+      payload.reserve(6 + DATA_MESSAGE_SIZE);
+      payload.append(reinterpret_cast<char*>(this->src), 6);
+      payload.append(reinterpret_cast<char*>(this->msg), DATA_MESSAGE_SIZE);
+      ws.binaryAll(reinterpret_cast<const uint8_t*>(payload.data()), payload.size());
+
+      // Sending data over BLE
       BLEController::instance().transmit(std::string(reinterpret_cast<char*>(this->msg), DATA_MESSAGE_SIZE));
+
       if(TESTING_ENABLED){
         uint16_t seq = static_cast<uint16_t>(atoi(reinterpret_cast<char*>(this->msg)));
         AcknowledgePacket ack_pkt(this->src, seq);
@@ -150,7 +160,7 @@ void DataPacket::handle() {
       }
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){
-        Serial.println("Sending to dest!");
+        // Serial.println("Sending to dest!");
         sendPacket(this->dest, *this);
       }else{
         sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
