@@ -130,14 +130,7 @@ void DataPacket::handle() {
   if(this->ttl > 0){
     uint8_t mac_bytes[6];
     macStringToBytes(WiFi.macAddress(), mac_bytes);
-    bool equal = true;
-    for (size_t i = 0; i < 6; ++i) {
-        if (this->dest[i] != mac_bytes[i]) {
-            equal = false;
-            break;
-        }
-    }
-    if(equal){
+    if(isMACEqual(this->dest, mac_bytes)){
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
       // Sending data over WebSocket

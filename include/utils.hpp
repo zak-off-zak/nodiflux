@@ -42,4 +42,13 @@ inline String macBytesToString(const uint8_t mac_bytes[6]) {
     return String(buffer);
 }
 
+inline bool isMACEqual(const uint8_t a_mac[6], const uint8_t b_mac[6]){
+  for (size_t i = 0; i < 6; ++i) {
+    if (a_mac[i] != b_mac[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
 #endif // !UTILS
