@@ -153,7 +153,6 @@ void DataPacket::handle() {
       }
     } else {
       if(NodeRegistry::instance().peerExists(this->dest)){
-        // Serial.println("Sending to dest!");
         sendPacket(this->dest, *this);
       }else{
         sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);

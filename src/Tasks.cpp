@@ -35,7 +35,7 @@ void rrTestTask(void *param) {
     RRTest();
 
     Serial.println("[RR] RRTest task finished");
-    vTaskDelete(NULL); // self-destruct
+    vTaskDelete(NULL);
 }
 
 void serialCommandTask(void *param) {

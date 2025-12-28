@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <Arduino.h>
 #include <cstdio>
-#include <string>
 
 inline void writeLE16(uint8_t* buffer, size_t& offset, uint16_t value){
   buffer[offset++] = value & 0xFF;

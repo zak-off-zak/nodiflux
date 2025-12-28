@@ -6,7 +6,6 @@
 #include "Packet.hpp"
 #include "RetryJournal.hpp"
 #include "config.hpp"
-#include "utils.hpp"
 #include <cstdint>
 #include <esp_now.h>
 
@@ -15,7 +14,6 @@ void onDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len
     Serial.print("TOO LITTLE DATA RECIVED!\n");
     return;
   }
-
 
   Packet* pkt = Packet::deserializeFactory(incomingData, len);
 
@@ -28,16 +26,9 @@ void onDataReceive(const uint8_t* mac_addr, const uint8_t *incomingData, int len
   delete pkt;
 }
 
-void onDataSent(const uint8_t* mac_addr, esp_now_send_status_t status){
-  Serial.print("\r\nLast Packet Send Status:");
-  Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
-}
-
-
 void sendDiscoveryPacket(const uint8_t* broadcastAddress){
   DiscoveryPacket dsk_pkt;
   sendPacket(broadcastAddress, dsk_pkt);
-  // TODO: Double check with the kernel task timing
   delay(DIS_BROADCAST_SPEED);
 }
 
@@ -57,7 +48,6 @@ void sendPacket(const uint8_t* mac_addr, const Packet& packet){
   }
 }
 
-// TODO: REMOVE, debug only
 void sendDataPacket(const uint8_t* dest) {
     std::string message;
     bool seenCR = false;
@@ -97,7 +87,6 @@ void sendDataPacket(const uint8_t* dest) {
 }
 
 
-// TODO: Possible reafctor to bool
 void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
   if (esp_now_is_peer_exist(mac_addr)) {
     return;

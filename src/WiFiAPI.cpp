@@ -7,7 +7,6 @@
 #include "config.hpp"
 #include "utils.hpp"
 #include <cstddef>
-#include <string>
 
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
