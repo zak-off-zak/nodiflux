@@ -125,14 +125,10 @@ bool DataPacket::deserializeFields(const uint8_t* buffer, size_t len){
 }
 
 void DataPacket::handle() {
-  this->ttl = this->ttl - 1;
-  this->chs = this->checksum();
-  if(this->ttl > 0){
-    uint8_t mac_bytes[6];
-    macStringToBytes(WiFi.macAddress(), mac_bytes);
-    if(isMACEqual(this->dest, mac_bytes)){
+  commonRouting(*this, [this]() {
       Serial.print("Message: ");
       Serial.println((char*)this->msg);
+
       // Sending data over WebSocket
       std::string payload;
       payload.reserve(6 + DATA_MESSAGE_SIZE);
@@ -140,8 +136,10 @@ void DataPacket::handle() {
       payload.append(reinterpret_cast<char*>(this->msg), DATA_MESSAGE_SIZE);
       ws.binaryAll(reinterpret_cast<const uint8_t*>(payload.data()), payload.size());
 
-      // Sending data over BLE
-      BLEController::instance().transmit(std::string(reinterpret_cast<char*>(this->msg), DATA_MESSAGE_SIZE));
+      if(BLE_ENABLED){
+        // Sending data over BLE
+        BLEController::instance().transmit(std::string(reinterpret_cast<char*>(this->msg), DATA_MESSAGE_SIZE));
+      }
 
       if(TESTING_ENABLED){
         uint16_t seq = static_cast<uint16_t>(atoi(reinterpret_cast<char*>(this->msg)));
@@ -151,15 +149,5 @@ void DataPacket::handle() {
         AcknowledgePacket ack_pkt(this->src, this->pkt_id);
         sendPacket(this->src, ack_pkt);
       }
-    } else {
-      if(NodeRegistry::instance().peerExists(this->dest)){
-        sendPacket(this->dest, *this);
-      }else{
-        sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
-      }
-    }
-  } else {
-    // DEBUG ONLY
-    Serial.println("TTL 0 -> Dropping the packet");
-  }
+  });
 }

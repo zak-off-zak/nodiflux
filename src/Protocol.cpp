@@ -6,6 +6,7 @@
 #include "Packet.hpp"
 #include "RetryJournal.hpp"
 #include "config.hpp"
+#include "utils.hpp"
 #include <cstdint>
 #include <esp_now.h>
 

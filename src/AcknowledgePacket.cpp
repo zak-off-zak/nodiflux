@@ -112,12 +112,7 @@ AcknowledgePacket::AcknowledgePacket(const uint8_t dest[6], const uint16_t packe
 AcknowledgePacket::AcknowledgePacket(){}
 
 void AcknowledgePacket::handle() {
-  this->ttl = this->ttl - 1;
-  this->chs = this->checksum();
-  if(this->ttl > 0){
-    uint8_t mac_bytes[6];
-    macStringToBytes(WiFi.macAddress(), mac_bytes);
-    if(isMACEqual(this->dest, mac_bytes)){
+  commonRouting(*this, [this]() {
       if(TESTING_ENABLED){
         onTestAckReceived(this);
       } else {
@@ -125,14 +120,5 @@ void AcknowledgePacket::handle() {
         Serial.println(macBytesToString(this->src));
       }
       RetryJournal::instance().deleteEntry(this->ack_pkt_id);
-    } else {
-      if(NodeRegistry::instance().peerExists(this->dest)){
-        sendPacket(this->dest, *this);
-      }else{
-        sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
-      }
-    }
-  } else {
-    Serial.println("TTL <= 0 -> Dropping the packet");
-  }
+  });
 }
