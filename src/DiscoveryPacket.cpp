@@ -43,7 +43,6 @@ size_t DiscoveryPacket::serialize(uint8_t* buffer, size_t buffer_size) const {
 }
 
 uint8_t DiscoveryPacket::checksum() const{
-  // Could be done diretly on field to save memory
   // Size of the packet is 10
   uint8_t cs = 0;
   uint8_t bytes[10];
@@ -55,21 +54,6 @@ uint8_t DiscoveryPacket::checksum() const{
 }
 
 void DiscoveryPacket::handle() {
-  // Serial.println("Handling DiscoveryPacket:");
-  //
-  // serial.print("src: ");
-  // for (int i = 0; i < 6; i++) {
-  //   serial.printf("%02x", src[i]);
-  //   if (i < 5) serial.print(":");
-  // }
-  // serial.println();
-  //
-  // Serial.print("pkt_id: ");
-  // Serial.println(pkt_id);
-  //
-  // Serial.print("chs: ");
-  // Serial.println(chs);
-
   NodeRegistry::instance().updateNode(this->src, std::time(nullptr));
 }
 

@@ -10,7 +10,6 @@
 #include "config.hpp"
 #include <NimBLEDevice.h>
 #include <cstdint>
-#include <string>
 
 void RxCallbacks::onWrite(NimBLECharacteristic* ch, NimBLEConnInfo& connInfo) {
   std::string value = ch->getValue();

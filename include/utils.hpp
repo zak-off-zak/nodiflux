@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <Arduino.h>
 #include <cstdio>
-#include <string>
 
 inline void writeLE16(uint8_t* buffer, size_t& offset, uint16_t value){
   buffer[offset++] = value & 0xFF;
@@ -40,6 +39,15 @@ inline String macBytesToString(const uint8_t mac_bytes[6]) {
         mac_bytes[3], mac_bytes[4], mac_bytes[5]
     );
     return String(buffer);
+}
+
+inline bool isMACEqual(const uint8_t a_mac[6], const uint8_t b_mac[6]){
+  for (size_t i = 0; i < 6; ++i) {
+    if (a_mac[i] != b_mac[i]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 #endif // !UTILS

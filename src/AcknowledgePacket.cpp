@@ -51,7 +51,6 @@ size_t AcknowledgePacket::serialize(uint8_t* buffer, size_t buffer_size) const {
 }
 
 uint8_t AcknowledgePacket::checksum() const{
-  // Could be done diretly on field to save memory
   // Size of the packet is 19
   uint8_t cs = 0;
   uint8_t bytes[19];
@@ -113,21 +112,7 @@ AcknowledgePacket::AcknowledgePacket(const uint8_t dest[6], const uint16_t packe
 AcknowledgePacket::AcknowledgePacket(){}
 
 void AcknowledgePacket::handle() {
-  // Serial.printf("AcknowledgePacket handling here\n");
-  // Serial.println(macBytesToString(this->src));
-  this->ttl = this->ttl - 1;
-  this->chs = this->checksum();
-  if(this->ttl > 0){
-    uint8_t mac_bytes[6];
-    macStringToBytes(WiFi.macAddress(), mac_bytes);
-    bool equal = true;
-    for (size_t i = 0; i < 6; ++i) {
-        if (this->dest[i] != mac_bytes[i]) {
-            equal = false;
-            break;
-        }
-    }
-    if(equal){
+  commonRouting(*this, [this]() {
       if(TESTING_ENABLED){
         onTestAckReceived(this);
       } else {
@@ -135,15 +120,5 @@ void AcknowledgePacket::handle() {
         Serial.println(macBytesToString(this->src));
       }
       RetryJournal::instance().deleteEntry(this->ack_pkt_id);
-    } else {
-      if(NodeRegistry::instance().peerExists(this->dest)){
-        sendPacket(this->dest, *this);
-      }else{
-        sendPacket(NodeRegistry::instance().getMostRecentNode().data(), *this);
-      }
-    }
-  } else {
-    // DEBUG ONLY
-    Serial.println("TTL 0 -> Dropping the packet");
-  }
+  });
 }

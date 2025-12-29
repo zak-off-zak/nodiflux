@@ -4,9 +4,6 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
-#include <string>
-
-#include "config.hpp"
 
 // Packet Types
 enum class PacketType : uint8_t {

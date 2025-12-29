@@ -1,9 +1,7 @@
 #include "RetryJournal.hpp"
 #include "DataPacket.hpp"
-#include "HardwareSerial.h"
 #include "Protocol.hpp"
 #include "config.hpp"
-#include "utils.hpp"
 #include <ctime>
 #include <memory>
 #include <mutex>

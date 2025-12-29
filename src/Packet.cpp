@@ -3,10 +3,6 @@
 #include "DiscoveryPacket.hpp"
 #include "AcknowledgePacket.hpp"
 #include "HardwareSerial.h"
-#include "NodeRegistry.hpp"
-#include "Protocol.hpp"
-#include "config.hpp"
-#include "utils.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -24,7 +20,6 @@ Packet* Packet::deserializeFactory(const uint8_t* buffer, size_t len){
     case PacketType::DAT: pkt = new DataPacket(); break;
   }
 
-  // TODO: Avoid double checking
   if(!pkt->deserializeFields(buffer, len)){
     delete pkt;
     Serial.println("Unknown packet type: deserializeFactory failed\n");

@@ -2,7 +2,6 @@
 #define RETRY_JOURNAL
 
 #include "DataPacket.hpp"
-#include "Packet.hpp"
 #include <cstdint>
 #include <ctime>
 #include <memory>

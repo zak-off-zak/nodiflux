@@ -23,39 +23,30 @@ void setup() {
   Serial.print("AP IP: ");
   Serial.println(WiFi.softAPIP());
   
-  // WiFi.mode(WIFI_STA);
-  // WiFi.begin(WSS_SSID, WSS_PASSWORD);
-  //
-  // while (WiFi.status() != WL_CONNECTED) {
-  //   delay(500);
-  //   Serial.print(".");
-  // }
-  // Serial.println("Connected! IP address: ");
-  // Serial.println(WiFi.localIP());
-  // Serial.print("Connected Wi-Fi channel: ");
-  // Serial.println(WiFi.channel());
 
   // Setting up ESP-NOW
   if(esp_now_init() != ESP_OK){
     Serial.print("\r\nError initializing ESP-NOW\n");
-    return; // TODO: Error handling or retry
+    return;
   }
 
   esp_now_register_recv_cb(onDataReceive);
-  // esp_now_register_send_cb(onDataSent);
 
   establishPeer(broadcastAddress, PEER_CHANNEL, PEER_ENCRYPT);
 
   xTaskCreatePinnedToCore(discoveryTask, "discoveryTask", 4096, (void*)broadcastAddress, 1, NULL, 1);
   xTaskCreatePinnedToCore(retryTask, "retryTask", 4096, NULL, 2, NULL, 1);
+
   if(TESTING_ENABLED){
     xTaskCreatePinnedToCore(serialCommandTask, "serialCommandTask", 4096, NULL, 2, NULL, 1);
   }
   if(SERIAL_MESSAGE_SENDING_ENABLED){
     xTaskCreatePinnedToCore(dataTask, "dataTask", 4096, (void*)mac_addr, 1, NULL, 1);
   }
+  if(BLE_ENABLED){
+    BLEController::instance().init();
+  }
 
-  BLEController::instance().init();
   initWS();
 }
 
