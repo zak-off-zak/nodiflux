@@ -31,7 +31,6 @@ void onWsEvent(AsyncWebSocket* server, AsyncWebSocketClient* client, AwsEventTyp
         uint8_t msg[DATA_MESSAGE_SIZE] = {0};
         std::memcpy(msg, data + 6, msg_len);
         DataPacket data_pkt(std::string(reinterpret_cast<char*>(msg), msg_len), dest);
-        Serial.println(macBytesToString(data_pkt.getDest()));
         sendPacket(dest, data_pkt);
       }
       break;
