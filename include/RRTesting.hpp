@@ -7,8 +7,9 @@
  * @brief Sends a test packet over the network
  *
  * @param seq The sequence number to track the test packets
+ * @return True, if the seq does not exceed the testing limit
  */
-void sendTestPacket(uint8_t seq);
+bool sendTestPacket(uint8_t seq);
 
 /**
  * @brief Marks the test packet as acknoledged
