@@ -25,7 +25,7 @@ class DiscoveryPacket : public Packet {
     /**
      * @brief Seralizes the DIS packet to a byte buffer.
      *
-     * @param buffer Buffer to be filled with the DAT packet bytes
+     * @param buffer Buffer to be filled with the DIS packet bytes
      * @param buffer_size The max size of the buffer
      * @return The number of bytes written to the buffer
      */
@@ -43,7 +43,7 @@ class DiscoveryPacket : public Packet {
     /**
      * @brief Calculates the simple XOR checksum over the fields of an DIS packet
      *
-     * @return One byte checksum of the ACK packet
+     * @return One byte checksum of the DIS packet
      */
     uint8_t checksum() const override;
 
