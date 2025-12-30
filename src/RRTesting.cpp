@@ -16,7 +16,7 @@ static uint32_t rttSum = 0;
 static uint32_t sendTime[TEST_COUNT];
 static bool acked[TEST_COUNT];
 
-bool sendTestPacket(uint8_t seq) {
+void sendTestPacket(uint8_t seq) {
     if (seq >= TEST_COUNT) return false;
 
     DataPacket pkt(std::to_string(seq), TEST_MAC);
@@ -25,7 +25,6 @@ bool sendTestPacket(uint8_t seq) {
 
     sendPacket(TEST_MAC, pkt);
     sent++;
-    return true;
 }
 
 void onTestAckReceived(AcknowledgePacket* ack_pkt) {
