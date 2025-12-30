@@ -12,6 +12,7 @@ void NodeRegistry::updateNode(const uint8_t mac[6], time_t t) {
   std::lock_guard<std::mutex> lock(this->mtx);
 
   if(TESTING_ENABLED){
+    // Banning a node for testing, so packet hopping can be testing with all of the nodes in one room
     const uint8_t banned_mac[] = {0x20, 0xE7, 0xC8, 0x5A, 0x2D, 0x18};
     if (memcmp(mac, banned_mac, 6) == 0) {
       return;

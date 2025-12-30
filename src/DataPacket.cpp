@@ -79,7 +79,6 @@ size_t DataPacket::serialize(uint8_t* buffer, size_t buffer_size) const {
 }
 
 uint8_t DataPacket::checksum() const{
-  // Could be done diretly on field to save memory
   // Size of the packet is 37
   uint8_t cs = 0;
   uint8_t bytes[DATA_MESSAGE_SIZE + 17];
