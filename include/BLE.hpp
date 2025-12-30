@@ -19,25 +19,28 @@ class BLEController {
     NimBLECharacteristic* tx = nullptr;
     NimBLECharacteristic* rx = nullptr;
   public:
+
     /**
      * @brief Default constructor
      */
     BLEController () = default;
+
     /**
      * @brief Delete the copy constructor
      */
     BLEController(const BLEController&) = delete;
+
     /**
      * @brief Detele copy assignment operator
      *
-     * @return [TODO:return]
+     * @return BLEController
      */
     BLEController& operator=(const BLEController&) = delete;
 
     /**
      * @brief Method to get the singelton instance
      *
-     * @return [TODO:return]
+     * @return Intance of the BLE controller
      */
     static BLEController& instance() {
       static BLEController instance;
