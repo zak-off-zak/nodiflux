@@ -1,5 +1,6 @@
 #include "AcknowledgePacket.hpp"
 #include "NodeRegistry.hpp"
+#include "WiFiAPI.hpp"
 #include "Protocol.hpp"
 #include "RetryJournal.hpp"
 #include "config.hpp"
@@ -118,6 +119,12 @@ void AcknowledgePacket::handle() {
       } else {
         Serial.print("ACK FROM: ");
         Serial.println(macBytesToString(this->src));
+        // Sending data over WebSocket
+        std::string payload;
+        payload.reserve(13);
+        payload.append(reinterpret_cast<char*>(this->src), 6);
+        payload.append("####ACK", 7);
+        ws.binaryAll(reinterpret_cast<const uint8_t*>(payload.data()), payload.size());
       }
       RetryJournal::instance().deleteEntry(this->ack_pkt_id);
   });
