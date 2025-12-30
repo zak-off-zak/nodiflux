@@ -61,7 +61,7 @@ class AcknowledgePacket : public Packet {
     size_t serialize(uint8_t* buffer, size_t buffer_size) const override;
 
     /**
-     * @brief deserializes the Fields from the byte buffer into an ACK packet object.
+     * @brief Deserializes the Fields from the byte buffer into an ACK packet object.
      *
      * @param buffer The byte buffer to deserialize from
      * @param len The length of the byte buffer
