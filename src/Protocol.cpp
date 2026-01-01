@@ -39,7 +39,7 @@ void sendPacket(const uint8_t* mac_addr, const Packet& packet){
     RetryJournal::instance().addEntry(dp);
   }
 
-  uint8_t buffer[DATA_MESSAGE_SIZE + 17];
+  uint8_t buffer[DATA_MESSAGE_SIZE + 17]; // 17 is the size of the default packet header
   size_t len = packet.serialize(buffer, sizeof(buffer));
   esp_err_t result = esp_now_send(mac_addr, buffer, len);
 
@@ -98,11 +98,7 @@ void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt){
   peer.encrypt = encrypt;
 
   Serial.print("Peer Established:");
-  for (int i = 0; i < 6; i++) {
-    Serial.printf("%02x", mac_addr[i]);
-    if (i < 5) Serial.print(":");
-  }
-  Serial.println();
+  Serial.println(macBytesToString(mac_addr));
 
   if (esp_now_add_peer(&peer) != ESP_OK) {
     Serial.println("Failed to add peer");

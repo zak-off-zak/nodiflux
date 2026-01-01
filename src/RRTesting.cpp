@@ -17,97 +17,97 @@ static uint32_t sendTime[TEST_COUNT];
 static bool acked[TEST_COUNT];
 
 bool sendTestPacket(uint8_t seq) {
-    if (seq >= TEST_COUNT) return false;
+  if (seq >= TEST_COUNT) return false;
 
-    DataPacket pkt(std::to_string(seq), TEST_MAC);
-    sendTime[seq] = millis();
-    acked[seq] = false;
+  DataPacket pkt(std::to_string(seq), TEST_MAC);
+  sendTime[seq] = millis();
+  acked[seq] = false;
 
-    sendPacket(TEST_MAC, pkt);
-    sent++;
-    return true;
+  sendPacket(TEST_MAC, pkt);
+  sent++;
+  return true;
 }
 
 void onTestAckReceived(AcknowledgePacket* ack_pkt) {
-    if (!ack_pkt) return;
+  if (!ack_pkt) return;
 
-    uint16_t seq = ack_pkt->getAckPacketId();
-    Serial.println(seq);
+  uint16_t seq = ack_pkt->getAckPacketId();
+  Serial.println(seq);
 
-    if (seq >= TEST_COUNT) return;
-    if (acked[seq]) return;
+  if (seq >= TEST_COUNT) return;
+  if (acked[seq]) return;
 
-    uint32_t rtt = millis() - sendTime[seq];
-    rttSum += rtt;
-    received++;
-    acked[seq] = true;
+  uint32_t rtt = millis() - sendTime[seq];
+  rttSum += rtt;
+  received++;
+  acked[seq] = true;
 }
 
 void RRTest() {
-    Serial.println("========= RUNNING RR TEST =========");
+  Serial.println("========= RUNNING RR TEST =========");
 
-    sent = 0;
-    received = 0;
-    rttSum = 0;
-    memset(acked, 0, sizeof(acked));
+  sent = 0;
+  received = 0;
+  rttSum = 0;
+  memset(acked, 0, sizeof(acked));
 
-    for (uint8_t i = 0; i < TEST_COUNT; i++) {
-        sendTestPacket(i);
-        delay(100);
-    }
+  for (uint8_t i = 0; i < TEST_COUNT; i++) {
+    sendTestPacket(i);
+    delay(100);
+  }
 
-    uint32_t startWait = millis();
-    while (millis() - startWait < TEST_TIMEOUT_MS) {
-        delay(1);
-    }
+  uint32_t startWait = millis();
+  while (millis() - startWait < TEST_TIMEOUT_MS) {
+    delay(1);
+  }
 
-    float packetLoss =
-        sent > 0 ? 100.0f * (sent - received) / sent : 0.0f;
+  float packetLoss =
+    sent > 0 ? 100.0f * (sent - received) / sent : 0.0f;
 
-    float avgRtt =
-        received > 0 ? (float)rttSum / received : 0.0f;
+  float avgRtt =
+    received > 0 ? (float)rttSum / received : 0.0f;
 
-    Serial.println("========= RR TEST RESULTS =========");
-    Serial.print("Sent: "); Serial.println(sent);
-    Serial.print("Received: "); Serial.println(received);
-    Serial.print("Packet loss: ");
-    Serial.print(packetLoss); Serial.println(" %");
-    Serial.print("Average RTT: ");
-    Serial.print(avgRtt); Serial.println(" ms");
-    Serial.println("===================================");
+  Serial.println("========= RR TEST RESULTS =========");
+  Serial.print("Sent: "); Serial.println(sent);
+  Serial.print("Received: "); Serial.println(received);
+  Serial.print("Packet loss: ");
+  Serial.print(packetLoss); Serial.println(" %");
+  Serial.print("Average RTT: ");
+  Serial.print(avgRtt); Serial.println(" ms");
+  Serial.println("===================================");
 }
 
 
 void RRTestTrigger(){
-    static String cmd;
+  static String cmd;
 
-    while (true) {
-        while (Serial.available()) {
-            char c = Serial.read();
+  while (true) {
+    while (Serial.available()) {
+      char c = Serial.read();
 
-            if (c == '\n' || c == '\r') {
-                cmd.trim();
+      if (c == '\n' || c == '\r') {
+        cmd.trim();
 
-                if (cmd == "rrtest") {
-                    Serial.println("[CMD] Starting RR test");
+        if (cmd == "rrtest") {
+          Serial.println("[CMD] Starting RR test");
 
-                    xTaskCreate(
-                        rrTestTask,
-                        "RRTest",
-                        4096,
-                        nullptr,
-                        2,
-                        nullptr
-                    );
-                }
-
-                cmd = "";
-            } else {
-                cmd += c;
-            }
+          xTaskCreate(
+            rrTestTask,
+            "RRTest",
+            4096,
+            nullptr,
+            2,
+            nullptr
+          );
         }
 
-        vTaskDelay(50 / portTICK_PERIOD_MS);
+        cmd = "";
+      } else {
+        cmd += c;
+      }
     }
+
+    vTaskDelay(50 / portTICK_PERIOD_MS);
+  }
 }
 

@@ -57,3 +57,4 @@ test_main
 compile_commands.json
 .ccls
 /include/env.hpp
+docs/html
