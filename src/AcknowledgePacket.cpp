@@ -127,5 +127,5 @@ void AcknowledgePacket::handle() {
         ws.binaryAll(reinterpret_cast<const uint8_t*>(payload.data()), payload.size());
       }
       RetryJournal::instance().deleteEntry(this->ack_pkt_id);
-  });
+  }, [this]() {RetryJournal::instance().deleteEntry(this->ack_pkt_id);});
 }

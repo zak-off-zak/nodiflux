@@ -148,5 +148,5 @@ void DataPacket::handle() {
         AcknowledgePacket ack_pkt(this->src, this->pkt_id);
         sendPacket(this->src, ack_pkt);
       }
-  });
+  }, []() {});
 }
