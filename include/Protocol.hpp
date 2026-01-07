@@ -53,8 +53,8 @@ void sendDataPacket(const uint8_t* dest);
  * @brief The fucntion to establish a peer connection with a node on the network
  *
  * @param mac_addr The pointer to the MAC address of the peer
- * @param channel [TODO:parameter]
- * @param encrypt [TODO:parameter]
+ * @param channel WiFi chanell that a peer has to use
+ * @param encrypt Whether the data sent over ESP-NOW is encrypted or not
  */
 void establishPeer(const uint8_t* mac_addr, uint8_t channel, bool encrypt);
 
