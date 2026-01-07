@@ -1,8 +1,8 @@
 # nodiflux
-A light weight decentalized, long-range, low-power, mesh communication protocol for IoT devices
+A light weight decentralized, long-range, low-power, mesh communication protocol for IoT devices
 
 ## Introduction
-Nodiflux is a protocol to enable decentralized. long-range, low-power communication between entitries over a set of IoT node. This reposiory presents a complete implementation of the protocol using NodeMCU ESP32 modlus as node. The goal of the protocol is to allow for short message delivery between nodes on the network without a central entitry for routing management.
+Nodiflux is a protocol to enable decentralized. long-range, low-power communication between entities over a set of IoT node. This reposiory presents a complete implementation of the protocol using NodeMCU ESP32 modules as node. The goal of the protocol is to allow for short message delivery between nodes on the network without a central entity for routing management.
 
 ## Protocol Design
 This section presents the high-level design principles behind the protocol. The protocol occupies the third layer (network layer) of the OSI model. The nodiflux is, therefore, responsible for structuring and managing a multi-node network. Specifically, the nodiflux protocol manages addressing, routing, and network traffic control. The current implementation of the protocol uses [ESP-NOW v0.1](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/network/esp_now.html) for data link and physical layers of the network.
@@ -27,3 +27,6 @@ Discovery packets do not posses any additional fields, as they are kept small fo
 | AcknowledgePacket    | ttl          | 1 | A field that holds the TTL value of the packet — the maximum number of hops before the packet is dropped. |
 
 ### Node Discovery and Node Registry
+The node discovery process is conducted by each of the nodes on the network on a periodic basis. Specifically, a node sends packets every `DIS_BROADCAST_SPEED` milliseconds. Once a node recieves a DIS packet it create an entry in a thead-safe singelton object—**NodeRegistry**. The MAC-address of the sender node and a timestamp are saved in the **NodeRegistry** and a new peer connection is established to the node. Futhremore, if a DIS packet is received and the node is already in the **NodeRegistry** only its timestamp gets updated.
+
+An additional kernel task was set up to prune old (inactive) nodes. Particularly, the pruning task is conducted every `NODE_REGISTRY_PRUNING_INTERVAL` milliseconds, whereby the nodes whoes timestamps in the **NodeRegistry** are older than `NODE_DISCARD_THRESHOLD` milliseconds are discarded.
