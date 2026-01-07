@@ -13,6 +13,7 @@
 #define RETRY_JOURNAL_SIZE 10
 #define NODE_REGISTRY_SIZE 10
 #define TESTING_ENABLED false
+#define BLOCK_MAC false
 #define SERIAL_MESSAGE_SENDING_ENABLED false
 #define BLE_ENABLED false
 
