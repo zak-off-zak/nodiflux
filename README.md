@@ -1,7 +1,6 @@
 <p align="center">
-  <img width="400" height="400" alt="nodiflux_logo_transparent2" src="https://github.com/user-attachments/assets/1182f788-fe90-40f7-8ea9-9c4f3b4595d0" />
+  <img width="200" height="200" alt="nodiflux_logo_transparent2" src="https://github.com/user-attachments/assets/ec5b3e23-ea9f-4da2-92f3-cc6676dcd5da" />
 </p>
-
 
 # nodiflux
 
