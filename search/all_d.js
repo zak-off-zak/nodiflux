@@ -15,6 +15,6 @@ var searchData=
   ['rrtesting_2ehpp_12',['RRTesting.hpp',['../RRTesting_8hpp.html',1,'']]],
   ['rrtesttask_13',['rrTestTask',['../Tasks_8hpp.html#a2655b6b5cfab8f67d835590dda708a1c',1,'rrTestTask(void *param):&#160;Tasks.cpp'],['../Tasks_8cpp.html#a2655b6b5cfab8f67d835590dda708a1c',1,'rrTestTask(void *param):&#160;Tasks.cpp']]],
   ['rrtesttrigger_14',['RRTestTrigger',['../RRTesting_8hpp.html#ae5a1818cce2b3ff59a5a967356a76ff7',1,'RRTestTrigger():&#160;RRTesting.cpp'],['../RRTesting_8cpp.html#ae5a1818cce2b3ff59a5a967356a76ff7',1,'RRTestTrigger():&#160;RRTesting.cpp']]],
-  ['rx_5fcharacteristic_5fuuid_15',['RX_CHARACTERISTIC_UUID',['../BLE_8hpp.html#a453c65c1707bcc126006ef99d8da2e1d',1,'BLE.hpp']]],
+  ['rx_5fcharacteristic_5fuuid_15',['RX_CHARACTERISTIC_UUID',['../config_8hpp.html#a453c65c1707bcc126006ef99d8da2e1d',1,'config.hpp']]],
   ['rxcallbacks_16',['RxCallbacks',['../classRxCallbacks.html',1,'']]]
 ];

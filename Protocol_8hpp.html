@@ -99,6 +99,7 @@ $(document).ready(function(){initNavTree('Protocol_8hpp.html',''); initResizable
 <div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
 <code>#include &lt;esp_now.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="Packet_8hpp_source.html">Packet.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="RetryJournal_8hpp_source.html">RetryJournal.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="NodeRegistry_8hpp_source.html">NodeRegistry.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utils_8hpp_source.html">utils.hpp</a>&quot;</code><br />
 <code>#include &lt;Arduino.h&gt;</code><br />
@@ -126,19 +127,19 @@ Functions</h2></td></tr>
 <tr class="memitem:a812dfb16c564feef8db1002b91d83d93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Protocol_8hpp.html#a812dfb16c564feef8db1002b91d83d93">establishPeer</a> (const uint8_t *<a class="el" href="main_8cpp.html#a6795b8bbcd9d2fb2e5012b4483c57d29">mac_addr</a>, uint8_t channel, bool encrypt)</td></tr>
 <tr class="memdesc:a812dfb16c564feef8db1002b91d83d93"><td class="mdescLeft">&#160;</td><td class="mdescRight">The fucntion to establish a peer connection with a node on the network.  <br /></td></tr>
 <tr class="separator:a812dfb16c564feef8db1002b91d83d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa20d5d96dfbd9b4f083b4ea8a7d1ff72"><td class="memTemplParams" colspan="2">template&lt;typename PktT , typename LambdaCallback &gt; </td></tr>
-<tr class="memitem:aa20d5d96dfbd9b4f083b4ea8a7d1ff72"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="Protocol_8hpp.html#aa20d5d96dfbd9b4f083b4ea8a7d1ff72">commonRouting</a> (PktT &amp;pkt, LambdaCallback lambdaCallback)</td></tr>
-<tr class="memdesc:aa20d5d96dfbd9b4f083b4ea8a7d1ff72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the common routing procedures for both DAT and ACK packets on the network.  <br /></td></tr>
-<tr class="separator:aa20d5d96dfbd9b4f083b4ea8a7d1ff72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bb0691d06e5c0d5e991ae810ac7da18"><td class="memTemplParams" colspan="2">template&lt;typename PktT , typename LambdaCallback , typename AckCallBack &gt; </td></tr>
+<tr class="memitem:a7bb0691d06e5c0d5e991ae810ac7da18"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="Protocol_8hpp.html#a7bb0691d06e5c0d5e991ae810ac7da18">commonRouting</a> (PktT &amp;pkt, LambdaCallback lambdaCallback, AckCallBack ackCallBack)</td></tr>
+<tr class="memdesc:a7bb0691d06e5c0d5e991ae810ac7da18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the common routing procedures for both DAT and ACK packets on the network.  <br /></td></tr>
+<tr class="separator:a7bb0691d06e5c0d5e991ae810ac7da18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="aa20d5d96dfbd9b4f083b4ea8a7d1ff72" name="aa20d5d96dfbd9b4f083b4ea8a7d1ff72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa20d5d96dfbd9b4f083b4ea8a7d1ff72">&#9670;&#160;</a></span>commonRouting()</h2>
+<a id="a7bb0691d06e5c0d5e991ae810ac7da18" name="a7bb0691d06e5c0d5e991ae810ac7da18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bb0691d06e5c0d5e991ae810ac7da18">&#9670;&#160;</a></span>commonRouting()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename PktT , typename LambdaCallback &gt; </div>
+template&lt;typename PktT , typename LambdaCallback , typename AckCallBack &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void commonRouting </td>
@@ -150,7 +151,13 @@ template&lt;typename PktT , typename LambdaCallback &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">LambdaCallback&#160;</td>
-          <td class="paramname"><em>lambdaCallback</em>&#160;</td>
+          <td class="paramname"><em>lambdaCallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AckCallBack&#160;</td>
+          <td class="paramname"><em>ackCallBack</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -165,6 +172,7 @@ template&lt;typename PktT , typename LambdaCallback &gt; </div>
   <table class="tparams">
     <tr><td class="paramname">PktT</td><td>Taype of the <a class="el" href="classPacket.html" title="Abstract class for the packet.">Packet</a> </td></tr>
     <tr><td class="paramname">LambdaCallback</td><td>Type of the callback function </td></tr>
+    <tr><td class="paramname">AckCallBack</td><td>Type of the callback function to be called on ACK </td></tr>
   </table>
   </dd>
 </dl>
@@ -214,8 +222,8 @@ template&lt;typename PktT , typename LambdaCallback &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">mac_addr</td><td>The pointer to the MAC address of the peer </td></tr>
-    <tr><td class="paramname">channel</td><td>[TODO:parameter] </td></tr>
-    <tr><td class="paramname">encrypt</td><td>[TODO:parameter] </td></tr>
+    <tr><td class="paramname">channel</td><td>WiFi chanell that a peer has to use </td></tr>
+    <tr><td class="paramname">encrypt</td><td>Whether the data sent over ESP-NOW is encrypted or not </td></tr>
   </table>
   </dd>
 </dl>

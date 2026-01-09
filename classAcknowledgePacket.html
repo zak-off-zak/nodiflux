@@ -183,10 +183,10 @@ Protected Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:aa20d5d96dfbd9b4f083b4ea8a7d1ff72"><td class="memTemplParams" colspan="2">template&lt;typename PktT , typename LambdaCallback &gt; </td></tr>
-<tr class="memitem:aa20d5d96dfbd9b4f083b4ea8a7d1ff72"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classAcknowledgePacket.html#aa20d5d96dfbd9b4f083b4ea8a7d1ff72">commonRouting</a> (PktT &amp;pkt, LambdaCallback lambdaCallback)</td></tr>
-<tr class="memdesc:aa20d5d96dfbd9b4f083b4ea8a7d1ff72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the common routing procedures for both DAT and ACK packets on the network.  <br /></td></tr>
-<tr class="separator:aa20d5d96dfbd9b4f083b4ea8a7d1ff72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7bb0691d06e5c0d5e991ae810ac7da18"><td class="memTemplParams" colspan="2">template&lt;typename PktT , typename LambdaCallback , typename AckCallBack &gt; </td></tr>
+<tr class="memitem:a7bb0691d06e5c0d5e991ae810ac7da18"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classAcknowledgePacket.html#a7bb0691d06e5c0d5e991ae810ac7da18">commonRouting</a> (PktT &amp;pkt, LambdaCallback lambdaCallback, AckCallBack ackCallBack)</td></tr>
+<tr class="memdesc:a7bb0691d06e5c0d5e991ae810ac7da18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the common routing procedures for both DAT and ACK packets on the network.  <br /></td></tr>
+<tr class="separator:a7bb0691d06e5c0d5e991ae810ac7da18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -440,13 +440,13 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="aa20d5d96dfbd9b4f083b4ea8a7d1ff72" name="aa20d5d96dfbd9b4f083b4ea8a7d1ff72"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa20d5d96dfbd9b4f083b4ea8a7d1ff72">&#9670;&#160;</a></span>commonRouting</h2>
+<a id="a7bb0691d06e5c0d5e991ae810ac7da18" name="a7bb0691d06e5c0d5e991ae810ac7da18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bb0691d06e5c0d5e991ae810ac7da18">&#9670;&#160;</a></span>commonRouting</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename PktT , typename LambdaCallback &gt; </div>
+template&lt;typename PktT , typename LambdaCallback , typename AckCallBack &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -461,7 +461,13 @@ template&lt;typename PktT , typename LambdaCallback &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">LambdaCallback&#160;</td>
-          <td class="paramname"><em>lambdaCallback</em>&#160;</td>
+          <td class="paramname"><em>lambdaCallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AckCallBack&#160;</td>
+          <td class="paramname"><em>ackCallBack</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -481,6 +487,7 @@ template&lt;typename PktT , typename LambdaCallback &gt; </div>
   <table class="tparams">
     <tr><td class="paramname">PktT</td><td>Taype of the <a class="el" href="classPacket.html" title="Abstract class for the packet.">Packet</a> </td></tr>
     <tr><td class="paramname">LambdaCallback</td><td>Type of the callback function </td></tr>
+    <tr><td class="paramname">AckCallBack</td><td>Type of the callback function to be called on ACK </td></tr>
   </table>
   </dd>
 </dl>
@@ -495,6 +502,7 @@ template&lt;typename PktT , typename LambdaCallback &gt; </div>
   <table class="tparams">
     <tr><td class="paramname">PktT</td><td>Taype of the <a class="el" href="classPacket.html" title="Abstract class for the packet.">Packet</a> </td></tr>
     <tr><td class="paramname">LambdaCallback</td><td>Type of the callback function </td></tr>
+    <tr><td class="paramname">AckCallBack</td><td>Type of the callback function to be called on ACK </td></tr>
   </table>
   </dd>
 </dl>

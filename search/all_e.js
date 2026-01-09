@@ -8,7 +8,7 @@ var searchData=
   ['serialcommandtask_5',['serialCommandTask',['../Tasks_8cpp.html#a67000b4ecb7c08c200307b82d1674d8d',1,'serialCommandTask(void *param):&#160;Tasks.cpp'],['../Tasks_8hpp.html#a67000b4ecb7c08c200307b82d1674d8d',1,'serialCommandTask(void *param):&#160;Tasks.cpp']]],
   ['serialize_6',['serialize',['../classDataPacket.html#a225fde1773ae38cbf118d53f7a7903df',1,'DataPacket::serialize()'],['../classPacket.html#a9ac88c1aee8b2f8fa29c1033161a99d3',1,'Packet::serialize()'],['../classDiscoveryPacket.html#aa368ed6c142510db0e6191de5257029f',1,'DiscoveryPacket::serialize()'],['../classAcknowledgePacket.html#a9e86481c55e81082c68b99f65444fa66',1,'AcknowledgePacket::serialize()']]],
   ['server_7',['server',['../WiFiAPI_8hpp.html#a56916c67f21f332014c1c19b200d45f3',1,'server():&#160;WiFiAPI.hpp'],['../WiFiAPI_8cpp.html#a85f30d66aa1231313c8553fd485b22b1',1,'server(80):&#160;WiFiAPI.cpp']]],
-  ['service_5fuuid_8',['SERVICE_UUID',['../BLE_8hpp.html#a445125ee8c34695376c85f10b38844d6',1,'BLE.hpp']]],
+  ['service_5fuuid_8',['SERVICE_UUID',['../config_8hpp.html#a445125ee8c34695376c85f10b38844d6',1,'config.hpp']]],
   ['setup_9',['setup',['../main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d',1,'main.cpp']]],
   ['src_10',['src',['../classPacket.html#a057ae0ef8139bc1fea1a68e778f4e75c',1,'Packet']]]
 ];
