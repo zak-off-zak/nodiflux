@@ -25,11 +25,12 @@ class AcknowledgePacket : public Packet {
      *
      * @tparam PktT Taype of the Packet
      * @tparam LambdaCallback Type of the callback function
+     * @tparam AckCallBack Type of the callback function to be called on ACK
      * @param pkt The actual packet to be routed
      * @param lambdaCallback Callback funtion to execute during the routing procedure
      */
-    template<typename PktT, typename LambdaCallback>
-    friend void commonRouting(PktT& pkt, LambdaCallback lambdaCallback);
+    template<typename PktT, typename LambdaCallback, typename AckCallBack>
+    friend void commonRouting(PktT& pkt, LambdaCallback lambdaCallback, AckCallBack ackCallBack);
 
     /**
      * @brief Return the ack_pkt_id of an ACK packet

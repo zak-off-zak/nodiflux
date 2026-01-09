@@ -25,7 +25,7 @@ void dataTask(void *param){
 void retryTask(void *param){
   while(true){
     RetryJournal::instance().executeRetries();
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    vTaskDelay(NODE_REGISTRY_PRUNING_INTERVAL / portTICK_PERIOD_MS);
   }
 }
 
