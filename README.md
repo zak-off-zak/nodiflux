@@ -1,3 +1,8 @@
+<p align="center">
+  <img width="400" height="400" alt="nodiflux_logo_transparent2" src="https://github.com/user-attachments/assets/1182f788-fe90-40f7-8ea9-9c4f3b4595d0" />
+</p>
+
+
 # nodiflux
 
 A lightweight decentralized, long-range, low-power, mesh communication protocol for IoT devices
