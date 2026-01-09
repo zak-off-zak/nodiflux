@@ -109,7 +109,7 @@ A node of the Nodiflux can be flashed by attaching it to the computer and runnin
 
 ## Acknowledgements
 
-Some parts of the protocol were inspired by the following paper:
+Some parts of the protocol were inspired by the following [paper](https://doi.org/10.3390/s25196036):
 
 ```
 Arregui Almeida, D., Chafla Altamirano, J., Román Cañizares, M., Játiva, P. P., Guaña-Moya, J., & Sánchez, I. (2025). Gateway-Free LoRa Mesh on ESP32: Design, Self-Healing Mechanisms, and Empirical Performance. Sensors, 25(19), 6036. https://doi.org/10.3390/s25196036
