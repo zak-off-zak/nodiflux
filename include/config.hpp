@@ -16,6 +16,12 @@
 #define TESTING_ENABLED false
 #define BLOCK_MAC false
 #define SERIAL_MESSAGE_SENDING_ENABLED false
+
 #define BLE_ENABLED false
+#define SERVICE_UUID "40c8ef9d-8aad-401e-b951-9005e8768dcb"
+#define RX_CHARACTERISTIC_UUID "aaacb24b-f61d-4e31-9c25-e2aeb24055bc"
+#define TX_CHARACTERISTIC_UUID "bbb6580a-0a39-4adf-a62f-f9dede706480"
+#define BLE_AD_NAME "ESP-NODE-A"
+
 
 #endif // !CONFIG

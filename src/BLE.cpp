@@ -42,7 +42,7 @@ void BLEController::init(){
   service->start();
 
   NimBLEAdvertising* adv =  NimBLEDevice::getAdvertising();
-  adv->setName("ESP-NODE");
+  adv->setName(BLE_AD_NAME);
   adv->addServiceUUID(SERVICE_UUID);
   adv->start();
 
