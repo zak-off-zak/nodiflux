@@ -1,27 +1,35 @@
 #ifndef CONFIG
 #define CONFIG
 
+// General Config
 #define DATA_MESSAGE_SIZE 20
 #define DIS_BROADCAST_SPEED 2000
-#define NODE_DISCARD_THRESHOLD (10 * DIS_BROADCAST_SPEED)
-#define NODE_REGISTRY_PRUNING_INTERVAL 1000
 #define DATA_TTL 6
 #define ACK_TTL 6
 #define PEER_CHANNEL 11
 #define PEER_ENCRYPT false
+
+// Retry Logic Config
 #define RETRY_TIME_THRESHOLD 2
 #define RETRY_CNT_THRESHOLD 3
 #define RETRY_JOURNAL_SIZE 10
 #define NODE_REGISTRY_SIZE 10
-#define TESTING_ENABLED false
-#define BLOCK_MAC false
-#define SERIAL_MESSAGE_SENDING_ENABLED false
+#define NODE_DISCARD_THRESHOLD (10 * DIS_BROADCAST_SPEED)
+#define NODE_REGISTRY_PRUNING_INTERVAL 1000
+
+// Bloom Filter Config
 #define BLOOM_FILTER_SIZE 1024
 
+// BLE Config
 #define BLE_ENABLED false
 #define SERVICE_UUID "40c8ef9d-8aad-401e-b951-9005e8768dcb"
 #define RX_CHARACTERISTIC_UUID "aaacb24b-f61d-4e31-9c25-e2aeb24055bc"
 #define TX_CHARACTERISTIC_UUID "bbb6580a-0a39-4adf-a62f-f9dede706480"
 #define BLE_AD_NAME "ESP-NODE-A"
+
+// Debug Helpers
+#define TESTING_ENABLED false
+#define BLOCK_MAC false
+#define SERIAL_MESSAGE_SENDING_ENABLED false
 
 #endif // !CONFIG
