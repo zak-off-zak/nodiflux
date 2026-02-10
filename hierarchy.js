@@ -1,6 +1,7 @@
 var hierarchy =
 [
     [ "BLEController", "classBLEController.html", null ],
+    [ "BloomFilter", "classBloomFilter.html", null ],
     [ "MacHash", "structMacHash.html", null ],
     [ "NimBLECharacteristicCallbacks", null, [
       [ "RxCallbacks", "classRxCallbacks.html", null ]

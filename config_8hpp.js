@@ -4,6 +4,7 @@ var config_8hpp =
     [ "BLE_AD_NAME", "config_8hpp.html#a3876ed53dd9ded72416a550971a92b3f", null ],
     [ "BLE_ENABLED", "config_8hpp.html#a332b962ec50384a5047f34702c8b70a6", null ],
     [ "BLOCK_MAC", "config_8hpp.html#afb2a1e76a08deec2860c3a9bd8ff66e4", null ],
+    [ "BLOOM_FILTER_SIZE", "config_8hpp.html#a87d2300a726bc1317d4e46653319a5d4", null ],
     [ "DATA_MESSAGE_SIZE", "config_8hpp.html#a4424021f5602ec182d1c6598a9b5518b", null ],
     [ "DATA_TTL", "config_8hpp.html#af8a249b7ebf4182458a3a6e781f8fdd8", null ],
     [ "DIS_BROADCAST_SPEED", "config_8hpp.html#a366cc17bd46065afd119fcaef4c314f0", null ],
